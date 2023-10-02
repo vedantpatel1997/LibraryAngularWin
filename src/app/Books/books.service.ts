@@ -3,16 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Book } from './book';
 import { environment } from '../environments/environment';
+import { APIResponse } from '../DTO/APIResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BooksService {
-  bookApiUrl = environment.apiAddress + 'Book/';
+  bookApiUrl = environment.apiAddress + 'Books/';
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.bookApiUrl + 'GetAllBooks');
+  getProducts(): Observable<APIResponse> {
+    return this.http.get<APIResponse>(this.bookApiUrl + 'GetAllBooks');
   }
 }

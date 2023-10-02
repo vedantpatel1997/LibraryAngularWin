@@ -8,6 +8,7 @@ import { Component } from '@angular/core';
         <!-- Bootstrap alert with a custom error message -->
         <div class="alert alert-danger" role="alert">
           <h4 class="alert-heading">Error!</h4>
+          <!-- <p>Unauthorized</p> -->
           <p>
             Something went wrong while getting the data. Please contact your
             administrator

@@ -1,13 +1,15 @@
 <div class="row">
   <div class="col-md-5 mx-auto">
-    <form>
+    <form (ngSubmit)="save()" [formGroup]="loginForm">
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <label for="exampleInputEmail1" class="form-label"
+          >Username or Email</label
+        >
         <input
-          type="email"
+          type="text"
           class="form-control"
-          id="exampleInputEmail1"
           aria-describedby="emailHelp"
+          formControlName="userId"
         />
         <div id="emailHelp" class="form-text">
           We'll never share your email with anyone else.
@@ -19,10 +21,17 @@
           type="password"
           class="form-control"
           id="exampleInputPassword1"
+          formControlName="password"
         />
       </div>
 
-      <button type="submit" class="btn btn-primary">Login</button>&nbsp;&nbsp;
+      <button
+        class="btn btn-primary"
+        type="submit"
+        [disabled]="!loginForm.valid"
+      >
+        Login</button
+      >&nbsp;&nbsp;
       <a [routerLink]="['registerUser']">Register New User</a>
     </form>
   </div>

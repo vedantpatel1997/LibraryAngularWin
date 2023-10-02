@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiAddress: 'https://localhost:7206/api/',
+  apiAddress: 'https://localhost:7026/api/',
   // apiAddress: 'https://libraryprojectapi.azurewebsites.net/api/'
 };
 

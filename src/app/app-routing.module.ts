@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './login/auth.guard';
+import { roleGuard } from './Shared/role.guard';
 
 const routes: Routes = [
   {
     path: '',
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
+    canActivate: [roleGuard],
     data: { preload: false },
     loadChildren: () =>
       import('./Books/books.module').then((m) => m.BooksModule),

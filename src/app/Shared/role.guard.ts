@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
+import { LoginService } from './login.service';
 import { Observable } from 'rxjs';
-import { LoginService } from '../Shared/login.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard {
+export class roleGuard {
   constructor(private router: Router, private loginSvc: LoginService) {}
 
   canActivate():
@@ -15,15 +15,13 @@ export class AuthGuard {
     | boolean
     | UrlTree {
     // Your authentication logic here
-    const allowAccess: boolean = true;
+    const hasAccess: boolean = this.loginSvc.haveAccess('Admin');
 
-    if (this.loginSvc.isLoggedin()) {
+    if (hasAccess) {
       return true; // User is authenticated, allow access
-      console.log(true);
     } else {
-      this.router.navigate(['/login']);
-      console.log(false);
-      return false; // Redirect to the login page
+      console.log('access denied');
+      return this.router.createUrlTree(['/login']); // Redirect to the login page
     }
   }
 }
