@@ -25,7 +25,7 @@ export class BooksService {
 
     // Make the HTTP POST request with the array of bookIds
     return this.http.post<APIResponse>(
-      this.bookApiUrl + 'getBooksByIds',
+      this.bookApiUrl + 'GetBooksByIds',
       bookIds
     );
   }

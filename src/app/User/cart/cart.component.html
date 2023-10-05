@@ -1,2 +1,34 @@
-<p>cart works!</p>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of cartItems; let i = index">
+      <td>{{ i + 1 }}</td>
+      <td>{{ item.title }}</td>
+      <td>{{ item.author }}</td>
+      <td>{{ item.price | currency : "USD" : "symbol" : "1.2-2" }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Total Price (Before Tax)</td>
+      <td>{{ 155.5656 | currency : "USD" : "symbol" : "1.2-2" }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Tax (13%)</td>
+      <td>{{ 15 | currency : "USD" : "symbol" : "1.2-2" }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Total Price (After Tax)</td>
+      <td>
+        {{ 15.2 | currency : "USD" : "symbol" : "1.2-2" }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <app-custom-error *ngIf="error"></app-custom-error>

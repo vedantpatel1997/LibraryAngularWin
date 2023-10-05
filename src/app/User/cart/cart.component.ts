@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Book } from 'src/app/DTO/book';
 import { BooksService } from 'src/app/Services/books.service';
 
 @Component({
@@ -8,6 +9,7 @@ import { BooksService } from 'src/app/Services/books.service';
 })
 export class CartComponent implements OnInit {
   error: boolean = false;
+  cartItems: Book[] = [];
   constructor(private bookSvc: BooksService) {}
   ngOnInit(): void {
     // Get the bookIds from local storage and parse it as JSON
@@ -17,20 +19,15 @@ export class CartComponent implements OnInit {
       console.log(bookIds);
 
       // Now you can call your service method with the array of bookIds
-      this.bookSvc.getBooksByIds(bookIds).subscribe({
-        next: (APIResult) => {
-          if (APIResult.isSuccess) {
-            console.log(APIResult);
-          }
+      this.bookSvc.getBooksByIds(bookIds).subscribe(
+        (APIResult) => {
+          if (APIResult.isSuccess) this.cartItems = APIResult.data;
         },
-        error: (error) => {
-          // Handle the error here
-          if (error.status == 401) {
-            console.log(error);
-          }
+        (error) => {
           this.error = true;
-        },
-      });
+          console.error('Error:', error);
+        }
+      );
     }
   }
 }
