@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
-import { LoginService } from './login.service';
+import { LoginService } from '../Services/login.service';
 
 @Injectable({
   providedIn: 'root',

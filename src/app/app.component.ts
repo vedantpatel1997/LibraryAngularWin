@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from './Shared/login.service';
+import { LoginService } from './Services/login.service';
+import { RouteChangeService } from './Shared/route-change.service';
 
 @Component({
   selector: 'app-root',
@@ -8,20 +9,29 @@ import { LoginService } from './Shared/login.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = 'LibraryManagement.web';
-
-  ngOnInit(): void {
-    this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
-  }
   userInfo = {
     isUser: false,
-    isADmin: false,
+    isAdmin: false,
     isLoggedin: false,
   };
+  title = 'LibraryManagement.web';
 
-  constructor(private route: Router, private loginSvc: LoginService) {}
+  constructor(
+    private route: Router,
+    private loginSvc: LoginService,
+    private routeChangeService: RouteChangeService
+  ) {}
+
+  ngOnInit(): void {
+    this.routeChangeService.getRouteChangeObservable().subscribe(() => {
+      // Perform actions based on the current route.
+      this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
+      this.userInfo.isUser = this.loginSvc.haveAccess('User');
+      this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
+    });
+  }
+
   logOut() {
     this.loginSvc.logOut();
-    this.userInfo.isLoggedin = false;
   }
 }

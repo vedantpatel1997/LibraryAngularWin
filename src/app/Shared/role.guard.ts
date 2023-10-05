@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Router, UrlTree } from '@angular/router';
-import { LoginService } from './login.service';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { LoginService } from '../Services/login.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,19 +9,30 @@ import { Observable } from 'rxjs';
 export class roleGuard {
   constructor(private router: Router, private loginSvc: LoginService) {}
 
-  canActivate():
+  canActivate(
+    route: ActivatedRouteSnapshot
+  ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    // Your authentication logic here
-    const hasAccess: boolean = this.loginSvc.haveAccess('Admin');
+    // Get the required role from route data
 
-    if (hasAccess) {
-      return true; // User is authenticated, allow access
+    // Check if the user is logged in
+    if (this.loginSvc.isLoggedin()) {
+      const requiredRole = route.data['role'];
+      // Check if the user has the required role
+      if (this.loginSvc.haveAccess(requiredRole)) {
+        return true; // User is authenticated and has access, allow access
+      } else {
+        console.log('Access denied. User does not have the required role.');
+        return false;
+      }
     } else {
-      console.log('access denied');
-      return this.router.createUrlTree(['/login']); // Redirect to the login page
+      // User is not logged in, redirect to the login page
+      this.router.navigate(['/login']);
+      console.log('User is not logged in. Redirecting to login page.');
+      return false;
     }
   }
 }

@@ -3,15 +3,28 @@ import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './login/auth.guard';
 import { roleGuard } from './Shared/role.guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
   {
     path: '',
+    component: DashboardComponent,
+  },
+  {
+    path: 'Books',
+    // canActivate: [AuthGuard],
+
+    loadChildren: () =>
+      import('./User/books.module').then((m) => m.BooksModule),
+  },
+  {
+    path: 'Admin',
     // canActivate: [AuthGuard],
     canActivate: [roleGuard],
-    data: { preload: false },
+    data: { preload: false, role: 'Admin' },
     loadChildren: () =>
-      import('./Books/books.module').then((m) => m.BooksModule),
+      import('./Admin/Users/users.module').then((m) => m.UsersModule),
   },
   {
     path: 'login',
@@ -19,13 +32,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./login/login.module').then((m) => m.LoginModule),
   },
-  { path: '', redirectTo: 'books', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), CommonModule],
   exports: [RouterModule],
-  declarations: [PageNotFoundComponent],
+  declarations: [PageNotFoundComponent, DashboardComponent],
 })
 export class AppRoutingModule {}

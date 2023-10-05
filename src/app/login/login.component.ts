@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../Shared/login.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { LoginService } from '../Services/login.service';
 import { userCred } from '../DTO/userCred';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Route, Router } from '@angular/router';
@@ -22,16 +22,22 @@ export class LoginComponent implements OnInit {
 
   save() {
     const loginData: userCred = {
-      username: 'vedantp9@gmail.com',
+      username: 'yash@gmail.com',
       password: '1234',
+      // username: 'vedantp9@gmail.com',
+      // password: '1234',
     };
 
     this.loginSvc.generateToken(loginData).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.loginSvc.saveTokens(APIResult.data);
-
-          this.route.navigate(['']);
+          if (this.loginSvc.haveAccess('Admin')) {
+            console.log('Works');
+            this.route.navigate(['/Admin/Dashboard']);
+          } else {
+            this.route.navigate(['']);
+          }
         }
       },
       error: (error) => {},

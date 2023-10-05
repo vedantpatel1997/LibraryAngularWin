@@ -1,3 +1,5 @@
+import { Category } from './Category';
+
 export interface Book {
   bookId: number;
   title: string;
@@ -6,4 +8,5 @@ export interface Book {
   availableQuantity: number;
   issuedQuantity: number;
   price: number;
+  category: Category;
 }

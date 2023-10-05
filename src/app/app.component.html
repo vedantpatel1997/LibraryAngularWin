@@ -16,41 +16,52 @@
       <ul class="navbar-nav ml-auto">
         <!-- Add ml-auto here -->
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['']">Dashboard</a>
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            *ngIf="!userInfo.isAdmin"
+            [routerLink]="['']"
+            >Home</a
+          >
         </li>
-      </ul>
-      <ul class="navbar-nav ms-auto">
-        <!-- <li class="nav-item"
-            *ngIf="isLoggedIn">
-          <a class="nav-link"
-             [routerLink]="['/login']">Welcome {{ userName }}</a>
-        </li>
-        <li class="nav-item"
-            *ngIf="!isMessageDisplayed">
-          <a class="nav-link"
-             (click)="displayMessages()">Show Messages</a>
-        </li>
-        <li class="nav-item"
-            *ngIf="isMessageDisplayed">
-          <a class="nav-link"
-             (click)="hideMessages()">Hide Messages</a>
-        </li> -->
         <li class="nav-item">
           <a
             class="nav-link"
-            *ngIf="!userInfo.isLoggedin"
-            [routerLink]="['/login']"
-            >Log In</a
+            routerLinkActive="active"
+            *ngIf="!userInfo.isAdmin"
+            [routerLink]="['Books']"
+            >Books</a
           >
         </li>
-        <li class="nav-item" *ngIf="userInfo.isLoggedin">
-          <a class="nav-link" (click)="logOut()" [routerLink]="['/login']"
-            >Log out</a
+
+        <li class="nav-item" *ngIf="userInfo.isAdmin">
+          <a class="nav-link" [routerLink]="['Admin', 'Dashboard']"
+            >Dashboard</a
           >
         </li>
-        <!-- <li class="nav-item" *ngIf="isLoggedIn">
-          <a class="nav-link" (click)="logOut()">Log Out</a>
-        </li> -->
+        <li class="nav-item" *ngIf="userInfo.isAdmin">
+          <a class="nav-link" [routerLink]="['Admin', 'Users']">Users</a>
+        </li>
+        <li class="nav-item" *ngIf="userInfo.isAdmin">
+          <a class="nav-link" [routerLink]="['Admin', 'Books']">Books</a>
+        </li>
+        <li class="nav-item" *ngIf="userInfo.isAdmin">
+          <a class="nav-link" [routerLink]="['Admin', 'Reports']">Reports</a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item" *ngIf="userInfo.isLoggedin && userInfo.isUser">
+          <a class="nav-link" [routerLink]="['Books', 'Cart']">Cart</a>
+        </li>
+        <li class="nav-item" *ngIf="!userInfo.isLoggedin; else loggedInOption">
+          <a class="nav-link" [routerLink]="['login']">Log In</a>
+        </li>
+        <ng-template #loggedInOption>
+          <li class="nav-item">
+            <a class="nav-link" (click)="logOut()">Log out</a>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>

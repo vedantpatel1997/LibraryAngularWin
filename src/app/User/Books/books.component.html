@@ -1,0 +1,41 @@
+<div class="row" *ngIf="!error">
+  <div class="col" *ngFor="let category of categories">
+    <a routerLink="/Books" [queryParams]="{ filter: category.name }">{{
+      category.name
+    }}</a>
+  </div>
+  <a
+    routerLink="/Books"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="button"
+    >All</a
+  >
+</div>
+<div *ngIf="!error">
+  <label for="Search">Search</label>
+  <input type="text" [(ngModel)]="search" />
+</div>
+
+<div class="row" *ngIf="!error">
+  <!-- Use a loop to generate cards for each book in the 'books' array -->
+  <div class="col-md-4 mb-3" *ngFor="let book of getFilteredProducts()">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ book.title }}</h5>
+        <p class="card-text">Author: {{ book.author }}</p>
+        <p class="card-text">Author: {{ book.category.name }}</p>
+        <p class="card-text">Price: {{ book.price | currency }}</p>
+      </div>
+
+      <!-- Add a button or link for more details if needed -->
+      <div class="card-footer">
+        <a class="btn btn-primary">View Details</a>&nbsp;&nbsp;
+        <a class="btn btn-primary" (click)="addToCart(book.bookId)"
+          >Add To Cart</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<app-custom-error *ngIf="error"></app-custom-error>
