@@ -9,6 +9,7 @@ import { RouteChangeService } from './Shared/route-change.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  userId: Number | undefined;
   userInfo = {
     isUser: false,
     isAdmin: false,

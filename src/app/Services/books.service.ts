@@ -19,6 +19,26 @@ export class BooksService {
   getAllCategories(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.bookApiUrl + 'GetAllCategories');
   }
+  addToCart(userId: number, bookId: number): Observable<APIResponse> {
+    const body = { userId: userId, bookId: bookId };
+    return this.http.post<APIResponse>(`${this.bookApiUrl}AddToCart`, body);
+  }
+
+  removeFromCart(userId: number, bookId: number): Observable<APIResponse> {
+    const body = { userId: userId, bookId: bookId };
+
+    return this.http.post<APIResponse>(
+      `${this.bookApiUrl}RemoveFromCart`,
+      body
+    );
+  }
+
+  getCartItemsByUserId(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookApiUrl}GetCartItemsByUserId?userId=${userId}`
+    );
+  }
+
   getBooksByIds(bookIds: number[]): Observable<APIResponse> {
     // Define the headers if needed
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

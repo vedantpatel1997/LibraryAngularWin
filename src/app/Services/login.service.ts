@@ -42,6 +42,9 @@ export class LoginService {
   isLoggedin() {
     return localStorage.getItem('token') !== null;
   }
+  getLoggedinUserId() {
+    return localStorage.getItem('curUser') !== null;
+  }
 
   getTokenValue() {
     return localStorage.getItem('token') || '';
@@ -87,11 +90,13 @@ export class LoginService {
   saveTokens(tokenData: APIToken) {
     localStorage.setItem('token', tokenData.token);
     localStorage.setItem('refreshToken', tokenData.refreshToken);
+    localStorage.setItem('curUser', tokenData.curUser.toString());
   }
 
   logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('curUser');
     this.route.navigateByUrl('/login');
   }
 }

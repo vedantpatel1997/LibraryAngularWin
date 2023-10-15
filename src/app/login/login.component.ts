@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { LoginService } from '../Services/login.service';
 import { userCred } from '../DTO/userCred';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 
 @Component({
@@ -9,23 +9,31 @@ import { Route, Router } from '@angular/router';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-  constructor(private loginSvc: LoginService, private route: Router) {
-    this.loginForm = new FormGroup({
-      userId: new FormControl(),
-      password: new FormControl(),
-    });
+  constructor(private loginSvc: LoginService, private route: Router) {}
+
+  loginForm: FormGroup = new FormGroup({
+    emailOrUsername: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+  });
+
+  ngOnInit(): void {
+    // this.loginForm.controls['emailOrUsername'].valueChanges.subscribe((res) => {
+    //   console.log(this.loginForm.controls['emailOrUsername']);
+    // });
   }
-
-  loginForm: FormGroup;
-
-  ngOnInit(): void {}
 
   save() {
     const loginData: userCred = {
-      username: 'yash@gmail.com',
-      password: '1234',
-      // username: 'vedantp9@gmail.com',
+      // username: 'yash@gmail.com',
       // password: '1234',
+      username: this.loginForm.controls['emailOrUsername'].value,
+      password: this.loginForm.controls['password'].value,
     };
 
     this.loginSvc.generateToken(loginData).subscribe({

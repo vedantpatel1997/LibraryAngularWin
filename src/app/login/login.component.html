@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-5 mx-auto">
-    <form (ngSubmit)="save()" [formGroup]="loginForm">
+    <form (ngSubmit)="save()" [formGroup]="loginForm" #form="ngForm">
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label"
           >Username or Email</label
@@ -9,13 +9,33 @@
           type="text"
           class="form-control"
           aria-describedby="emailHelp"
-          formControlName="userId"
+          formControlName="emailOrUsername"
         />
+        <div
+          class="text-danger"
+          *ngIf="
+            loginForm.controls['emailOrUsername'].errors &&
+            (form.submitted || loginForm.controls['emailOrUsername'].touched)
+          "
+        >
+          <span
+            [hidden]="!loginForm.controls['emailOrUsername'].errors['required']"
+          >
+            Enter Username or Email</span
+          >
+          <span
+            [hidden]="
+              !loginForm.controls['emailOrUsername'].errors['minlength']
+            "
+          >
+            Please Enter at least 3 char</span
+          >
+        </div>
         <div id="emailHelp" class="form-text">
           We'll never share your email with anyone else.
         </div>
       </div>
-      <div class="mb-3">
+      <div>
         <label for="exampleInputPassword1" class="form-label">Password</label>
         <input
           type="password"
@@ -24,13 +44,22 @@
           formControlName="password"
         />
       </div>
-
-      <button
-        class="btn btn-primary"
-        type="submit"
-        [disabled]="!loginForm.valid"
+      <div
+        class="text-danger"
+        *ngIf="
+          loginForm.controls['password'].errors &&
+          (form.submitted || loginForm.controls['password'].touched)
+        "
       >
-        Login</button
+        <span [hidden]="!loginForm.controls['password'].errors['required']">
+          Enter Password</span
+        >
+        <span [hidden]="!loginForm.controls['password'].errors['minlength']">
+          Please Enter at least 3 char</span
+        >
+      </div>
+
+      <button class="btn btn-primary mt-3" type="submit">Login</button
       >&nbsp;&nbsp;
       <a [routerLink]="['registerUser']">Register New User</a>
     </form>
