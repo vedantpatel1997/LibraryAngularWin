@@ -6,6 +6,7 @@ import { ErrorComponent } from '../error.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from '../login/auth.guard';
+import { MyBooksComponent } from './my-books/my-books.component';
 
 const routes: Routes = [
   { path: '', component: BooksComponent },
@@ -14,10 +15,20 @@ const routes: Routes = [
     path: 'Cart',
     component: CartComponent,
   },
+  {
+    canActivate: [AuthGuard],
+    path: 'MyBooks',
+    component: MyBooksComponent,
+  },
 ];
 
 @NgModule({
-  declarations: [BooksComponent, ErrorComponent, CartComponent],
+  declarations: [
+    BooksComponent,
+    ErrorComponent,
+    CartComponent,
+    MyBooksComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

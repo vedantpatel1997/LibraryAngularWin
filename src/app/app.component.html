@@ -33,6 +33,15 @@
             >Books</a
           >
         </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLinkActive="active"
+            *ngIf="userInfo.isLoggedin && userInfo.isUser"
+            [routerLink]="['Books', 'MyBooks']"
+            >My Books</a
+          >
+        </li>
 
         <li class="nav-item" *ngIf="userInfo.isAdmin">
           <a class="nav-link" [routerLink]="['Admin', 'Dashboard']"

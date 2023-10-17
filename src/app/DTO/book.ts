@@ -9,4 +9,6 @@ export interface Book {
   issuedQuantity: number;
   price: number;
   category: Category;
+  rentPeriod: number;
+  totalRentPrice: number;
 }

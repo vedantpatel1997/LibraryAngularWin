@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BillingInfo } from 'src/app/DTO/BillingInfo';
+import { IssueBook } from 'src/app/DTO/IssueBook';
 import { Book } from 'src/app/DTO/book';
 import { BooksService } from 'src/app/Services/books.service';
 import { LoginService } from 'src/app/Services/login.service';
@@ -29,32 +30,12 @@ export class CartComponent implements OnInit {
     this.curUserId = Number(loginSvc.getLoggedinUserId());
   }
   ngOnInit(): void {
-    // // Get the bookIds from local storage and parse it as JSON
-    // const bookIdsString = localStorage.getItem('Cart');
-    // if (bookIdsString) {
-    //   const bookIds: number[] = JSON.parse(bookIdsString);
-    //   console.log(bookIds);
-
-    //   // Now you can call your service method with the array of bookIds
-    //   this.bookSvc.getBooksByIds(bookIds).subscribe(
-    //     (APIResult) => {
-    //       if (APIResult.isSuccess) this.cartItems = APIResult.data;
-    //     },
-    //     (error) => {
-    //       this.error = true;
-    //       console.error('Error:', error);
-    //     }
-    //   );
-    // }
-
     this.getBookData();
   }
 
   chekoutForm: FormGroup = new FormGroup({
-    delivery: new FormControl('home', [
-      Validators.required,
-      Validators.minLength(3),
-    ]),
+    delivery: new FormControl('home', [Validators.required]),
+    rentPeriod: new FormControl('10', [Validators.required]),
   });
 
   getBookData() {
@@ -63,6 +44,10 @@ export class CartComponent implements OnInit {
         (APIResult) => {
           if (APIResult.isSuccess) {
             this.cartItems = APIResult.data;
+            this.cartItems.forEach((cur) => {
+              cur.rentPeriod = +this.chekoutForm.controls['rentPeriod'].value;
+            });
+            this.onRentDaysChage();
             this.calculateBillingInfo();
           } else {
             this.error = true;
@@ -99,13 +84,35 @@ export class CartComponent implements OnInit {
   calculateTotalBookAmount(): number {
     let totalBookAmount = 0;
     this.cartItems.forEach((cur) => {
-      totalBookAmount += cur.price;
+      totalBookAmount += cur.totalRentPrice;
     });
     return +totalBookAmount.toFixed(2);
   }
 
+  onRentDaysChage() {
+    this.cartItems.forEach((cur) => {
+      cur.totalRentPrice = +(
+        cur.price +
+        (+cur.rentPeriod / 100) * cur.price
+      ).toFixed(2);
+    });
+    this.onDeliveryOptionChange();
+  }
+
+  getReturnDate(days: number): string {
+    const currentDate = new Date();
+    const returnDate = new Date(currentDate);
+    returnDate.setDate(currentDate.getDate() + +days);
+
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    };
+    return returnDate.toLocaleDateString('en-US', options);
+  }
+
   onDeliveryOptionChange() {
-    console.log('changed');
     // Update billing info when the delivery option changes
     this.calculateBillingInfo();
   }
@@ -141,8 +148,43 @@ export class CartComponent implements OnInit {
   }
 
   save() {
+    let issueBookData: IssueBook[] = [];
+    this.cartItems.forEach((cartItem) => {
+      const issueBook: IssueBook = {
+        bookId: cartItem.bookId,
+        userId: this.curUserId,
+        issueDate: new Date().toISOString(),
+        days: cartItem.rentPeriod,
+        returned: false,
+      };
+
+      issueBookData.push(issueBook);
+    });
+
     if (this.chekoutForm.valid) {
-      console.log('checkout');
+      this.bookSvc.issueBooks(issueBookData).subscribe({
+        next: (APIResult) => {
+          if (APIResult.isSuccess) {
+            this.getBookData();
+            this.bookSvc.showMessage(
+              'Purchase Successful!',
+              'success',
+              'TOPLevel'
+            );
+            console.log(APIResult);
+          } else {
+            console.log(APIResult);
+            this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+          }
+        },
+        error: (error) => {
+          // Handle the error here
+          if (error.status == 401) {
+            // Handle unauthorized error if needed
+          }
+          this.error = true;
+        },
+      });
     }
   }
 }

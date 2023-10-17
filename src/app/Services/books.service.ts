@@ -4,12 +4,15 @@ import { Observable, tap } from 'rxjs';
 import { Book } from '../DTO/book';
 import { environment } from '../environments/environment';
 import { APIResponse } from '../DTO/APIResponse';
+import { IssueBook } from '../DTO/IssueBook';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BooksService {
   bookApiUrl = environment.apiAddress + 'Books/';
+  bookUserTransactionApiUrl =
+    environment.apiAddress + 'BooksUsersTransactions/';
 
   constructor(private http: HttpClient) {}
 
@@ -33,6 +36,13 @@ export class BooksService {
     );
   }
 
+  issueBooks(issueBooksData: IssueBook[]): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.bookUserTransactionApiUrl}IssueBooks`,
+      issueBooksData
+    );
+  }
+
   getCartItemsByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookApiUrl}GetCartItemsByUserId?userId=${userId}`
@@ -50,8 +60,14 @@ export class BooksService {
     );
   }
 
-  showMessage(message: string, alertType: string = 'info') {
-    const alertContainer = document.getElementById('liveAlertPlaceholder');
+  showMessage(message: string, alertType: string = 'info', level: string = '') {
+    let alertContainer;
+    if (level == '') {
+      alertContainer = document.getElementById('liveAlertPlaceholder');
+    } else {
+      alertContainer = document.getElementById('liveAlertPlaceholder1');
+    }
+
     const validAlertTypes = ['success', 'info', 'warning', 'danger'];
 
     if (validAlertTypes.includes(alertType)) {
