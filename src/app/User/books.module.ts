@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BooksComponent } from './Books/books.component';
 import { CommonModule } from '@angular/common';
 import { ErrorComponent } from '../error.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
 import { AuthGuard } from '../login/auth.guard';
 
@@ -18,6 +18,11 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [BooksComponent, ErrorComponent, CartComponent],
-  imports: [CommonModule, RouterModule.forChild(routes), FormsModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class BooksModule {}

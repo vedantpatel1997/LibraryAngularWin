@@ -49,4 +49,22 @@ export class BooksService {
       bookIds
     );
   }
+
+  showMessage(message: string, alertType: string = 'info') {
+    const alertContainer = document.getElementById('liveAlertPlaceholder');
+    const validAlertTypes = ['success', 'info', 'warning', 'danger'];
+
+    if (validAlertTypes.includes(alertType)) {
+      alertContainer!.innerHTML = `
+        <div class="alert alert-${alertType} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `;
+    } else {
+      console.error(
+        'Invalid alert type. Valid types are: success, info, warning, danger'
+      );
+    }
+  }
 }

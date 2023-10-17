@@ -11,6 +11,7 @@ import { APIToken } from '../DTO/APIToken';
   providedIn: 'root',
 })
 export class LoginService {
+  curUser: Number | undefined;
   bookApiUrl = environment.apiAddress + 'Authorize/';
   constructor(private http: HttpClient, private route: Router) {}
 
@@ -43,7 +44,8 @@ export class LoginService {
     return localStorage.getItem('token') !== null;
   }
   getLoggedinUserId() {
-    return localStorage.getItem('curUser') !== null;
+    if (this.curUser !== null) return this.curUser;
+    return false;
   }
 
   getTokenValue() {
@@ -76,6 +78,7 @@ export class LoginService {
 
       // Check if the role in the token matches the specified role
       if (finalData && finalData.role && finalData.role.trim() === role) {
+        this.curUser = finalData.UserId;
         return true; // Role matches, access granted
       }
     } catch (error) {
@@ -90,13 +93,11 @@ export class LoginService {
   saveTokens(tokenData: APIToken) {
     localStorage.setItem('token', tokenData.token);
     localStorage.setItem('refreshToken', tokenData.refreshToken);
-    localStorage.setItem('curUser', tokenData.curUser.toString());
   }
 
   logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('curUser');
     this.route.navigateByUrl('/login');
   }
 }

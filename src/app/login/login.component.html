@@ -59,9 +59,17 @@
         >
       </div>
 
-      <button class="btn btn-primary mt-3" type="submit">Login</button
+      <button
+        class="btn btn-primary mt-3"
+        type="submit"
+        [disabled]="!loginForm.valid"
+      >
+        Login</button
       >&nbsp;&nbsp;
       <a [routerLink]="['registerUser']">Register New User</a>
+      <div class="alert alert-danger mt-5" role="alert" *ngIf="invalid">
+        Invalid Credentials
+      </div>
     </form>
   </div>
 </div>

@@ -9,6 +9,7 @@ import { Route, Router } from '@angular/router';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
+  invalid: boolean = false;
   constructor(private loginSvc: LoginService, private route: Router) {}
 
   loginForm: FormGroup = new FormGroup({
@@ -42,10 +43,14 @@ export class LoginComponent implements OnInit {
           this.loginSvc.saveTokens(APIResult.data);
           if (this.loginSvc.haveAccess('Admin')) {
             console.log('Works');
+            this.invalid = false;
+
             this.route.navigate(['/Admin/Dashboard']);
           } else {
             this.route.navigate(['']);
           }
+        } else if (!APIResult.isSuccess) {
+          this.invalid = true;
         }
       },
       error: (error) => {},

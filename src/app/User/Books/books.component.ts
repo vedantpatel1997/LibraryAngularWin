@@ -4,6 +4,7 @@ import { BooksService } from '../../Services/books.service';
 import { Category } from '../../DTO/Category';
 import { CategoryService } from '../../Services/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from 'src/app/Services/login.service';
 
 @Component({
   selector: 'app-error',
@@ -19,6 +20,7 @@ export class BooksComponent implements OnInit {
 
   constructor(
     private booksSvc: BooksService,
+    private loginSvc: LoginService,
     private categorySvc: CategoryService,
     private router: Router,
     private route: ActivatedRoute
@@ -62,24 +64,51 @@ export class BooksComponent implements OnInit {
   }
 
   addToCart(bookId: number) {
-    // Get the current cart items from localStorage or initialize an empty array
-    const cartItemsString = localStorage.getItem('Cart');
-    const cartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
-
-    // Check if the bookId is already in the cart
-    const index = cartItems.indexOf(bookId);
-
-    if (index !== -1) {
-      // If bookId is already in the cart, remove it
-      alert('Book is already in the cart');
+    if (!this.loginSvc.isLoggedin()) {
+      this.booksSvc.showMessage('Please Login to add book.');
       return;
-    } else {
-      // If bookId is not in the cart, add it
-      cartItems.push(bookId);
     }
+    let userId = Number(this.loginSvc.getLoggedinUserId());
 
-    // Save the updated cart items back to localStorage
-    localStorage.setItem('Cart', JSON.stringify(cartItems));
+    this.booksSvc.addToCart(userId, bookId).subscribe({
+      next: (APIResult) => {
+        if (APIResult.isSuccess) {
+          this.booksSvc.showMessage(
+            'Item added to cart successfully!',
+            'success'
+          );
+        }
+        if (!APIResult.isSuccess) {
+          this.booksSvc.showMessage(APIResult.errorMessage, 'success');
+        }
+      },
+      error: (error) => {
+        // Handle the error here
+        if (error.status == 401) {
+          this.unauthorized = true;
+        }
+        this.error = true;
+      },
+    });
+
+    // // Get the current cart items from localStorage or initialize an empty array
+    // const cartItemsString = localStorage.getItem('Cart');
+    // const cartItems = cartItemsString ? JSON.parse(cartItemsString) : [];
+
+    // // Check if the bookId is already in the cart
+    // const index = cartItems.indexOf(bookId);
+
+    // if (index !== -1) {
+    //   // If bookId is already in the cart, remove it
+    //   alert('Book is already in the cart');
+    //   return;
+    // } else {
+    //   // If bookId is not in the cart, add it
+    //   cartItems.push(bookId);
+    // }
+
+    // // Save the updated cart items back to localStorage
+    // localStorage.setItem('Cart', JSON.stringify(cartItems));
   }
 
   getFilteredProducts() {
