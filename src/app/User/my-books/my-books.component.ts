@@ -53,21 +53,22 @@ export class MyBooksComponent implements OnInit {
       issueDateObj.getTime() + days * 24 * 60 * 60 * 1000
     ); // Add days in milliseconds
 
-    return this.formatDate(returnDateObj.toISOString()); // Returns the calculated date in the ISO format
+    return returnDateObj.toISOString(); // Returns the calculated date in the ISO format
   }
 
   calculateDaysRemaining(endDate: string): number {
     const currentDate = new Date();
     const endDateObj = new Date(endDate);
 
-    // Set the time part of the endDate to midnight (00:00:00)
+    // Set both dates to midnight (00:00:00) to ensure accurate day count
+    currentDate.setHours(0, 0, 0, 0);
     endDateObj.setHours(0, 0, 0, 0);
 
     // Calculate the time difference in milliseconds
     const timeDifference = endDateObj.getTime() - currentDate.getTime();
 
     // Calculate the number of days remaining
-    const daysRemaining = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
     return daysRemaining;
   }

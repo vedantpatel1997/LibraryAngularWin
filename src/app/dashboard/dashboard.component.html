@@ -1,16 +1,20 @@
-<div class="container" *ngIf="!error">
-  <div class="row">
-    <div class="col" *ngFor="let category of categories">
-      <a [routerLink]="['Books']" [queryParams]="{ filter: category.name }">{{
-        category.name
-      }}</a>
-    </div>
+<div class="row" *ngIf="!error">
+  <div class="col d-grid gap-2 d-sm-flex justify-content-md-center">
     <a
       routerLink="/Books"
       routerLinkActive="active"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="button"
+      class="btn btn-outline-secondary me-2"
+      [queryParams]="{ filter: null }"
       >All</a
     >
+    <ng-container *ngFor="let category of categories">
+      <a
+        class="btn btn-outline-secondary me-2"
+        routerLink="/Books"
+        [queryParams]="{ filter: category.name }"
+        >{{ category.name }}</a
+      >
+    </ng-container>
   </div>
 </div>

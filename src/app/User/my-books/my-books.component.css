@@ -8,3 +8,9 @@
   align-items: center;
   justify-content: center;
 }
+/* Custom CSS class for highlighting cart items with a penalty */
+.cart-penalty {
+  background-color: #f8d7da; /* Background color for cart with penalty */
+  border: 1px solid #dc3545; /* Border color for cart with penalty */
+  padding: 10px; /* Padding to provide spacing and better visibility */
+}
