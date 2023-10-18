@@ -14,7 +14,7 @@ import { LoginService } from 'src/app/Services/login.service';
 export class CartComponent implements OnInit {
   error: boolean = false;
   cartItems: Book[] = [];
-  curUserId: number | undefined;
+  curUserId: any;
 
   billingInfo: BillingInfo = {
     quantity: 0,
@@ -153,9 +153,7 @@ export class CartComponent implements OnInit {
       const issueBook: IssueBook = {
         bookId: cartItem.bookId,
         userId: this.curUserId,
-        issueDate: new Date().toISOString(),
         days: cartItem.rentPeriod,
-        returned: false,
       };
 
       issueBookData.push(issueBook);

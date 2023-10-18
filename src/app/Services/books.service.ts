@@ -42,6 +42,21 @@ export class BooksService {
       issueBooksData
     );
   }
+  submitBook(SubmitBooksData: {
+    bookId: number;
+    userId: number;
+  }): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.bookUserTransactionApiUrl}SubmitBook`,
+      SubmitBooksData
+    );
+  }
+
+  getBooksByUserId(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GetBooksByUserID?userId=${userId}`
+    );
+  }
 
   getCartItemsByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(

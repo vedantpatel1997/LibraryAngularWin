@@ -1,1 +1,71 @@
-<p>my-books works!</p>
+<h2 class="my-4">Your Issued Book</h2>
+<div *ngIf="myBooks.length == 0" class="row mt-4">
+  <div class="col-12">
+    <div class="custom-box">
+      <h2>You don't have any issued book</h2>
+    </div>
+  </div>
+</div>
+<div *ngIf="myBooks.length !== 0" class="col-8 pe-3">
+  <div class="rounded p-3 border">
+    <div class="cart-item">
+      <div id="liveAlertPlaceholder"></div>
+      <!-- Item List -->
+      <div
+        class="cart-item-container border rounded p-3 mb-3 position-relative"
+        *ngFor="let cur of myBooks"
+      >
+        <div class="row">
+          <div class="col-2">
+            <img
+              class="img-fluid"
+              src="https://m.media-amazon.com/images/I/61y6sHSiHhL._SL1500_.jpg"
+              alt="Book 1"
+            />
+          </div>
+          <div class="col-6">
+            <h4>{{ cur.book?.title }}</h4>
+            <p>{{ cur.book?.author }}</p>
+            <p>
+              <strong>Issued On: </strong
+              >{{ cur.issueDate ? formatDate(cur.issueDate) : 0 }} for
+              <strong>{{ cur.days }} </strong>
+              Days
+            </p>
+            <button
+              type="button"
+              class="btn btn-outline-success"
+              (click)="submitBook(cur.bookId)"
+            >
+              Submit Book
+            </button>
+          </div>
+          <div class="col-3">
+            <div>
+              <strong>Estimated Return Date:</strong>
+              <p>
+                {{
+                  cur.issueDate
+                    ? getEstimateReturnDate(cur.days, cur.issueDate)
+                    : 0
+                }}
+              </p>
+            </div>
+            <div>
+              <strong>Days Remaining</strong>
+              <h3 class="text-danger">
+                {{
+                  cur.issueDate
+                    ? calculateDaysRemaining(
+                        getEstimateReturnDate(cur.days, cur.issueDate)
+                      )
+                    : 0
+                }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

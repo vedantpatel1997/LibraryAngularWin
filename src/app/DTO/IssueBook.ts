@@ -1,7 +1,11 @@
+import { User } from './User';
+import { Book } from './book';
+
 export interface IssueBook {
   bookId: number;
-  userId?: number;
-  issueDate: string; // convert date to .toISOString()
+  userId: number;
   days: number;
-  returned: boolean;
+  issueDate?: string;
+  book?: Book;
+  user?: User;
 }
