@@ -98,4 +98,10 @@ export class BooksService {
       );
     }
   }
+
+  getBookHistoryByUserId(userId: number) {
+    return this.http.get<APIResponse>(
+      `${this.bookApiUrl}getBookHistoryByUserId?userId=${userId}`
+    );
+  }
 }

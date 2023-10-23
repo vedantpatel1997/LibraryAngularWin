@@ -41,7 +41,15 @@ export class LoginService {
   }
 
   isLoggedin() {
-    return localStorage.getItem('token') !== null;
+    if (
+      this.getLoggedinUserId() &&
+      (this.haveAccess('User') ||
+        this.haveAccess('Admin') ||
+        this.haveAccess('Owner'))
+    ) {
+      return true;
+    }
+    return false;
   }
   getLoggedinUserId() {
     if (this.curUser !== null) return this.curUser;

@@ -5,6 +5,7 @@ import { APIResponse } from 'src/app/DTO/APIResponse';
 import { environment } from 'src/app/environments/environment';
 import { User } from '../DTO/User';
 import { Address } from '../DTO/Address';
+import { UpdatePassword } from '../DTO/UpdatePassword';
 
 @Injectable({
   providedIn: 'root',
@@ -50,6 +51,13 @@ export class UsersService {
     return this.http.post<APIResponse>(
       `${this.bookApiUrl}UpdateAddress?userId=${userId}`,
       addressData
+    );
+  }
+
+  updatePassword(password: UpdatePassword): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.bookApiUrl}UpdatePassword`,
+      password
     );
   }
 }

@@ -23,6 +23,7 @@ export class AuthGuard {
     } else {
       this.router.navigate(['/login']);
       console.log(false);
+      this.loginSvc.logOut();
       return false; // Redirect to the login page
     }
   }
