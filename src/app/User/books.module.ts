@@ -20,6 +20,13 @@ const routes: Routes = [
     path: 'MyBooks',
     component: MyBooksComponent,
   },
+  {
+    path: 'User',
+    // canActivate: [AuthGuard],
+
+    loadChildren: () =>
+      import('./UserInfo/user-info.module').then((m) => m.UserInfoModule),
+  },
 ];
 
 @NgModule({

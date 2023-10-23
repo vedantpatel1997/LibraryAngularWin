@@ -49,23 +49,52 @@
 
       <ul class="navbar-nav ms-auto">
         <li
-          class="nav-item dropdown"
+          class="nav-item dropdown-center"
           *ngIf="userInfo.isLoggedin && userInfo.isUser"
         >
           <a
             class="nav-link dropdown-toggle"
-            href="#"
             role="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            Hello Vedant
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i class="fa-regular fa-user fa-lg"></i>
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">User Info</a></li>
-            <li><a class="dropdown-item" href="#">Add / Update Address</a></li>
+            <li>
+              <a
+                class="dropdown-item"
+                routerLinkActive="active"
+                [routerLink]="['Books', 'User', 'Info']"
+                >User Info</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                [routerLink]="['Books', 'User', 'Address']"
+                routerLinkActive="active"
+                >Add / Update Address</a
+              >
+            </li>
             <li><hr class="dropdown-divider" /></li>
-            <li><a class="dropdown-item" href="#">Books History</a></li>
+            <li>
+              <a
+                class="dropdown-item"
+                [routerLink]="['Books', 'User', 'History']"
+                routerLinkActive="active"
+                >Books History</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                [routerLink]="['Books', 'User', 'Password']"
+                routerLinkActive="active"
+                >Change Password</a
+              >
+            </li>
           </ul>
         </li>
         <li class="nav-item" *ngIf="userInfo.isLoggedin && userInfo.isUser">

@@ -18,7 +18,6 @@ import { Component } from '@angular/core';
             vedantp9@gmail.com &nbsp;|&nbsp;<i class="fas fa-phone"></i> +1 647
             627 4235
           </p>
-          <p></p>
         </div>
       </div>
     </div>
