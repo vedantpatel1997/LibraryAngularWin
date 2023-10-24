@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Book } from '../../DTO/book';
 import { BooksService } from '../../Services/books.service';
 import { Category } from '../../DTO/Category';
 import { CategoryService } from '../../Services/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/Services/login.service';
+import { Book } from 'src/app/DTO/book';
 
 @Component({
   selector: 'app-error',

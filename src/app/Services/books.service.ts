@@ -26,7 +26,6 @@ export class BooksService {
     const body = { userId: userId, bookId: bookId };
     return this.http.post<APIResponse>(`${this.bookApiUrl}AddToCart`, body);
   }
-
   removeFromCart(userId: number, bookId: number): Observable<APIResponse> {
     const body = { userId: userId, bookId: bookId };
 
@@ -35,7 +34,6 @@ export class BooksService {
       body
     );
   }
-
   issueBooks(issueBooksData: IssueBook[]): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       `${this.bookUserTransactionApiUrl}IssueBooks`,
@@ -51,19 +49,16 @@ export class BooksService {
       SubmitBooksData
     );
   }
-
   getBooksByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookUserTransactionApiUrl}GetBooksByUserID?userId=${userId}`
     );
   }
-
   getCartItemsByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookApiUrl}GetCartItemsByUserId?userId=${userId}`
     );
   }
-
   getBooksByIds(bookIds: number[]): Observable<APIResponse> {
     // Define the headers if needed
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -74,7 +69,6 @@ export class BooksService {
       bookIds
     );
   }
-
   showMessage(message: string, alertType: string = 'info', level: string = '') {
     let alertContainer;
     if (level == '') {
@@ -98,10 +92,9 @@ export class BooksService {
       );
     }
   }
-
   getBookHistoryByUserId(userId: number) {
     return this.http.get<APIResponse>(
-      `${this.bookApiUrl}getBookHistoryByUserId?userId=${userId}`
+      `${this.bookUserTransactionApiUrl}getBooksHistoryByUserId?userId=${userId}`
     );
   }
 }

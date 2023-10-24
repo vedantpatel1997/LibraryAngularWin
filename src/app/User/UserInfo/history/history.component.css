@@ -1,0 +1,10 @@
+.custom-box {
+  border: 1px solid #ccc; /* Add your desired border styles */
+  border-radius: 9px;
+  padding: 15px;
+  background-color: #f8f8f8; /* Add your desired background color */
+  height: 150px; /* Set the fixed height as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
