@@ -13,8 +13,10 @@ import { UsersService } from 'src/app/Services/users.service';
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.css'],
 })
 export class CreateUserComponent implements OnInit, AfterViewInit {
+  spinnerVisible: boolean = false;
   constructor(
     private userSvc: UsersService,
     private route: Router,
@@ -131,6 +133,7 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
         username: this.userForm.controls['username'].value,
         password: this.userForm.controls['password'].value,
       };
+      this.spinnerVisible = true;
 
       this.userSvc.createUser(userData).subscribe({
         next: (APIResult) => {
@@ -141,13 +144,16 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
               'success'
             );
             this.userForm.reset(); // Reset form values
+            this.spinnerVisible = false;
           } else {
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+            this.spinnerVisible = false;
           }
         },
         error: (error) => {
           // Handle API call errors here
           console.log(error);
+          this.spinnerVisible = false;
         },
       });
     }

@@ -32,7 +32,14 @@
 
 <div class="container mt-5">
   <h2>Books History</h2>
-  <div *ngIf="booksHistory.length == 0" class="row mt-4">
+  <div class="spinner-container" *ngIf="spinnerVisible">
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="booksHistory.length == 0 && !spinnerVisible" class="row mt-4">
     <div class="col-12">
       <div class="custom-box">
         <h2>You don't have any history for submitted books</h2>

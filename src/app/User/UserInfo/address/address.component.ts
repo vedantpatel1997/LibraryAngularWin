@@ -11,6 +11,7 @@ import { UsersService } from 'src/app/Services/users.service';
   styleUrls: ['./address.component.css'],
 })
 export class AddressComponent implements OnInit {
+  spinnerVisible: boolean = false;
   curUserId: number;
   isDataArrived: boolean = false;
   isAddressRegistered: boolean = true;
@@ -69,6 +70,7 @@ export class AddressComponent implements OnInit {
   }
 
   getAddress() {
+    this.spinnerVisible = true;
     this.userSvc.GetAddressByUserId(this.curUserId).subscribe(
       (APIResult) => {
         if (APIResult.isSuccess) {
@@ -83,16 +85,19 @@ export class AddressComponent implements OnInit {
           });
           this.isDataArrived = true;
           this.updateFrom = false;
+          this.spinnerVisible = false;
           this.isAddressRegistered = true;
           this.addressForm.disable();
         }
         if (!APIResult.isSuccess) {
           this.isAddressRegistered = false;
           this.addressForm.disable();
+          this.spinnerVisible = false;
           this.isDataArrived = true;
         }
       },
       (error) => {
+        this.spinnerVisible = false;
         // Handle network or unexpected errors here
         this.bookSvc.showMessage(
           `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
@@ -111,6 +116,7 @@ export class AddressComponent implements OnInit {
 
   save() {
     if (this.addressForm.valid) {
+      this.spinnerVisible = true;
       this.addressData = {
         addressId: this.addressData.addressId,
         addressLine1: this.capitalizeFirstLetter(
@@ -141,9 +147,12 @@ export class AddressComponent implements OnInit {
                 `Address succesfully Updated.`,
                 'success'
               );
+              this.spinnerVisible = false;
+
               this.disableUpdate();
             } else {
               this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+              this.spinnerVisible = false;
             }
           },
           error: (error) => {
@@ -152,6 +161,7 @@ export class AddressComponent implements OnInit {
               `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong !`,
               'warning'
             );
+            this.spinnerVisible = false;
 
             console.log(error);
           },
@@ -163,8 +173,10 @@ export class AddressComponent implements OnInit {
             if (APIResult.isSuccess) {
               this.bookSvc.showMessage(`Address succesfully Added.`, 'success');
               this.disableUpdate();
+              this.spinnerVisible = false;
             } else {
               this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+              this.spinnerVisible = false;
             }
           },
           error: (error) => {
@@ -173,6 +185,8 @@ export class AddressComponent implements OnInit {
               `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong !`,
               'warning'
             );
+            this.spinnerVisible = false;
+
             console.log(error);
           },
         });

@@ -11,6 +11,7 @@ import { UsersService } from 'src/app/Services/users.service';
   styleUrls: ['./password.component.css'],
 })
 export class PasswordComponent implements OnInit {
+  spinnerVisible: boolean = false;
   updateFrom: boolean = false;
   curUserId: number;
 
@@ -70,12 +71,12 @@ export class PasswordComponent implements OnInit {
 
   save() {
     if (this.passwordForm.valid) {
+      this.spinnerVisible = true;
       let passwordData: UpdatePassword = {
         userId: this.curUserId,
         oldPassword: this.passwordForm.controls['oldPassword'].value,
         newPassword: this.passwordForm.controls['password'].value,
       };
-      console.log(passwordData);
       this.userSvc.updatePassword(passwordData).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
@@ -85,8 +86,10 @@ export class PasswordComponent implements OnInit {
             );
             console.log(APIResult);
             this.disableUpdate();
+            this.spinnerVisible = false;
           } else {
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+            this.spinnerVisible = false;
           }
         },
         error: (error) => {
@@ -96,6 +99,7 @@ export class PasswordComponent implements OnInit {
             'warning'
           );
           console.log(error);
+          this.spinnerVisible = false;
         },
       });
     }

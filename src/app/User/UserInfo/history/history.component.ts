@@ -12,6 +12,7 @@ import { UsersService } from 'src/app/Services/users.service';
 export class HistoryComponent implements OnInit {
   booksHistory: BooksHistory[] = [];
   curUserId: number;
+  spinnerVisible: boolean = false;
 
   constructor(
     private userSvc: UsersService,
@@ -22,16 +23,18 @@ export class HistoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.spinnerVisible = true;
     this.bookSvc.getBookHistoryByUserId(this.curUserId).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.booksHistory = APIResult.data;
-          console.log(APIResult);
+          this.spinnerVisible = false;
         }
       },
       error: (error) => {
         // Handle the error here
         console.log(error);
+        this.spinnerVisible = false;
       },
     });
   }

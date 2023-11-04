@@ -13,6 +13,7 @@ import { UsersService } from 'src/app/Services/users.service';
   styleUrls: ['./user-info.component.css'],
 })
 export class UserInfoComponent {
+  spinnerVisible: boolean = false;
   curUserId: number;
   userData: User = {
     userId: 0,
@@ -69,6 +70,7 @@ export class UserInfoComponent {
   });
 
   getUserData() {
+    this.spinnerVisible = true;
     this.userSvc.getUserByUserId(this.curUserId).subscribe(
       (APIResult) => {
         if (APIResult.isSuccess) {
@@ -82,12 +84,15 @@ export class UserInfoComponent {
             email: this.userData.email,
             phone: this.userData.phone,
           });
+          this.spinnerVisible = false;
         } else {
           console.log(APIResult);
+          this.spinnerVisible = false;
         }
       },
       (error) => {
         // Handle network or unexpected errors here
+        this.spinnerVisible = false;
 
         console.log('Network Error:', error);
       }
@@ -126,19 +131,24 @@ export class UserInfoComponent {
         phone: this.userForm.controls['phone'].value,
       };
 
+      this.spinnerVisible = true;
+
       this.userSvc.updateUser(userData, this.curUserId).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
             this.bookSvc.showMessage(`User succesfully Updated.`, 'success');
             this.userForm.disable();
             this.updateFrom = false;
+            this.spinnerVisible = false;
           } else {
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+            this.spinnerVisible = false;
           }
         },
         error: (error) => {
           // Handle API call errors here
           console.log(error);
+          this.spinnerVisible = false;
         },
       });
     }
