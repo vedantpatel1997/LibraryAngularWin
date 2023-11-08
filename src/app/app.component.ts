@@ -2,6 +2,7 @@ import { AfterContentInit, Component, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
 import { RouteChangeService } from './Shared/route-change.service';
+import { User } from './DTO/User';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,7 @@ import { RouteChangeService } from './Shared/route-change.service';
 })
 export class AppComponent implements OnInit {
   userId: Number | undefined;
+  curUser: User | undefined;
   userInfo = {
     isUser: false,
     isAdmin: false,
@@ -35,8 +37,9 @@ export class AppComponent implements OnInit {
       this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
       this.userInfo.isUser = this.loginSvc.haveAccess('User');
       this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
-
+      this.curUser = this.loginSvc.getUserData();
       console.log('Login Status', loggedIn);
+      console.log('Cur User: ', this.curUser);
     });
   }
 

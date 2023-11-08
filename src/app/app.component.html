@@ -48,10 +48,8 @@
       </ul>
 
       <ul class="navbar-nav ms-auto">
-        <li
-          class="nav-item dropdown-center"
-          *ngIf="userInfo.isLoggedin && userInfo.isUser"
-        >
+        `
+        <li class="nav-item dropdown-center" *ngIf="userInfo.isLoggedin">
           <a
             class="nav-link dropdown-toggle"
             role="button"
@@ -60,6 +58,7 @@
           >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <i class="fa-regular fa-user fa-lg"></i>
+            {{ curUser?.firstName }}
           </a>
           <ul class="dropdown-menu">
             <li>

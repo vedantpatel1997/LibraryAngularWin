@@ -12,9 +12,9 @@ import { User } from '../DTO/User';
   providedIn: 'root',
 })
 export class LoginService {
-  curUser: Number | undefined;
-  curUserdata: User | undefined;
-  bookApiUrl = environment.apiAddress + 'Authorize/';
+  private curUser: Number | undefined;
+  private curUserdata: User | undefined;
+  private bookApiUrl = environment.apiAddress + 'Authorize/';
   constructor(private http: HttpClient, private route: Router) {}
   private loggedInSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
@@ -123,6 +123,13 @@ export class LoginService {
   saveTokens(tokenData: APIToken) {
     localStorage.setItem('token', tokenData.token);
     localStorage.setItem('refreshToken', tokenData.refreshToken);
+  }
+  saveUserData(userData: User) {
+    this.curUserdata = userData;
+  }
+
+  getUserData() {
+    return this.curUserdata;
   }
 
   logOut() {

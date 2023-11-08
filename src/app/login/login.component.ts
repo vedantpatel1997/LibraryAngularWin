@@ -3,6 +3,8 @@ import { LoginService } from '../Services/login.service';
 import { userCred } from '../DTO/userCred';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
+import { of, switchMap } from 'rxjs';
+import { UsersService } from '../Services/users.service';
 
 @Component({
   selector: 'app-login',
@@ -48,7 +50,11 @@ export class LoginComponent implements OnInit {
   invalid: boolean = false;
   spinnerVisible: boolean = false;
 
-  constructor(private loginSvc: LoginService, private route: Router) {}
+  constructor(
+    private loginSvc: LoginService,
+    private route: Router,
+    private userService: UsersService
+  ) {}
 
   loginForm: FormGroup = new FormGroup({
     emailOrUsername: new FormControl('', [
@@ -66,38 +72,58 @@ export class LoginComponent implements OnInit {
     //   console.log(this.loginForm.controls['emailOrUsername']);
     // });
   }
-
   save() {
     const loginData: userCred = {
-      // username: 'yash@gmail.com',
-      // password: '1234',
       username: this.loginForm.controls['emailOrUsername'].value,
       password: this.loginForm.controls['password'].value,
     };
 
     this.spinnerVisible = true;
-    this.loginSvc.generateToken(loginData).subscribe({
-      next: (APIResult) => {
-        if (APIResult.isSuccess) {
-          this.loginSvc.saveTokens(APIResult.data);
-          this.loginSvc.login();
-          if (this.loginSvc.haveAccess('Admin')) {
-            console.log('Works');
-            this.invalid = false;
-            this.route.navigate(['/Admin/Dashboard']);
-            this.spinnerVisible = false;
+    this.loginSvc
+      .generateToken(loginData)
+      .pipe(
+        switchMap((APIResult) => {
+          if (APIResult.isSuccess) {
+            this.loginSvc.saveTokens(APIResult.data);
+            if (this.loginSvc.haveAccess('Admin')) {
+              console.log('Works');
+              this.invalid = false;
+              this.route.navigate(['/Admin/Dashboard']);
+            } else if (this.loginSvc.haveAccess('User')) {
+              this.route.navigate(['']);
+            }
+
+            // Check user role and make the second API call if needed
+
+            let curuserId = this.loginSvc.getLoggedinUserId();
+            if (curuserId !== undefined && !isNaN(curuserId as number)) {
+              // Return the result of the second API call (makeAnotherAPICall)
+              return this.userService.getUserByUserId(curuserId as number);
+            }
+
+            // Return an empty observable if no second API call is needed
+            return of(undefined);
           } else {
-            this.route.navigate(['']);
-            this.spinnerVisible = false;
+            this.invalid = true;
+            return of(undefined);
           }
-        } else if (!APIResult.isSuccess) {
-          this.invalid = true;
+        })
+      )
+      .subscribe(
+        (APIResult) => {
+          if (APIResult?.isSuccess) {
+            // Handle the result of the additional API call
+            this.loginSvc.saveUserData(APIResult.data);
+            this.loginSvc.login();
+          }
+
           this.spinnerVisible = false;
+        },
+        (error) => {
+          this.spinnerVisible = false;
+          // Handle errors
+          console.error('Error:', error);
         }
-      },
-      error: (error) => {
-        this.spinnerVisible = false;
-      },
-    });
+      );
   }
 }
