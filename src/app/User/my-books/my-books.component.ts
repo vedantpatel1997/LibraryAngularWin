@@ -11,6 +11,7 @@ import { LoginService } from 'src/app/Services/login.service';
 export class MyBooksComponent implements OnInit {
   myBooks: IssueBook[] = [];
   curUserId: any;
+  spinnerVisible: boolean = false;
 
   constructor(private bookSvc: BooksService, private loginSvc: LoginService) {
     this.curUserId = Number(this.loginSvc.getLoggedinUserId());
@@ -21,18 +22,21 @@ export class MyBooksComponent implements OnInit {
   }
 
   getBooksforCurUser() {
+    this.spinnerVisible = true;
     this.bookSvc.getBooksByUserId(this.curUserId).subscribe(
       (APIResult) => {
         if (APIResult.isSuccess) {
           this.myBooks = APIResult.data;
           console.log(APIResult.data);
+          this.spinnerVisible = false;
         } else {
           console.log(APIResult);
+          this.spinnerVisible = false;
         }
       },
       (error) => {
         // Handle network or unexpected errors here
-
+        this.spinnerVisible = false;
         console.log('Network Error:', error);
       }
     );
@@ -78,6 +82,7 @@ export class MyBooksComponent implements OnInit {
       bookId: bookId,
       userId: this.curUserId,
     };
+    this.spinnerVisible = true;
     this.bookSvc.submitBook(submitData).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
@@ -87,12 +92,14 @@ export class MyBooksComponent implements OnInit {
         } else {
           console.log(APIResult);
           this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+          this.spinnerVisible = false;
         }
       },
       error: (error) => {
         // Handle the error here
         if (error.status == 401) {
           console.log(error);
+          this.spinnerVisible = false;
         }
       },
     });

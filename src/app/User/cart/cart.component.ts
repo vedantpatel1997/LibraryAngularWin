@@ -15,6 +15,7 @@ export class CartComponent implements OnInit {
   error: boolean = false;
   cartItems: Book[] = [];
   curUserId: any;
+  spinnerVisible: boolean = false;
 
   billingInfo: BillingInfo = {
     quantity: 0,
@@ -40,6 +41,8 @@ export class CartComponent implements OnInit {
 
   getBookData() {
     if (this.curUserId !== undefined) {
+      this.spinnerVisible = true;
+
       this.bookSvc.getCartItemsByUserId(this.curUserId).subscribe(
         (APIResult) => {
           if (APIResult.isSuccess) {
@@ -49,16 +52,19 @@ export class CartComponent implements OnInit {
             });
             this.onRentDaysChage();
             this.calculateBillingInfo();
+            this.spinnerVisible = false;
           } else {
             this.error = true;
             // Handle other possible error scenarios here
             console.error('API Error:', APIResult.errorMessage);
+            this.spinnerVisible = false;
           }
         },
         (error) => {
           // Handle network or unexpected errors here
           this.error = true;
           console.error('Network Error:', error);
+          this.spinnerVisible = false;
         }
       );
     }
@@ -125,6 +131,7 @@ export class CartComponent implements OnInit {
 
     let userId = Number(this.loginSvc.getLoggedinUserId());
 
+    this.spinnerVisible = true;
     this.bookSvc.removeFromCart(userId, bookId).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
@@ -135,6 +142,7 @@ export class CartComponent implements OnInit {
           this.getBookData();
         } else {
           this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+          this.spinnerVisible = false;
         }
       },
       error: (error) => {
@@ -142,6 +150,7 @@ export class CartComponent implements OnInit {
         if (error.status == 401) {
           // Handle unauthorized error if needed
         }
+        this.spinnerVisible = false;
         this.error = true;
       },
     });
@@ -160,6 +169,8 @@ export class CartComponent implements OnInit {
     });
 
     if (this.chekoutForm.valid) {
+      this.spinnerVisible = true;
+
       this.bookSvc.issueBooks(issueBookData).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
@@ -169,13 +180,14 @@ export class CartComponent implements OnInit {
               'success',
               'TOPLevel'
             );
-            console.log(APIResult);
           } else {
             console.log(APIResult);
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
+            this.spinnerVisible = false;
           }
         },
         error: (error) => {
+          this.spinnerVisible = false;
           // Handle the error here
           if (error.status == 401) {
             // Handle unauthorized error if needed
