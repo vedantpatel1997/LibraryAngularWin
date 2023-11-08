@@ -25,11 +25,15 @@ export class roleGuard {
       if (this.loginSvc.haveAccess(requiredRole)) {
         return true; // User is authenticated and has access, allow access
       } else {
+        alert('Access denied. User does not have the required role.');
+        this.router.navigate(['/Books']);
+
         console.log('Access denied. User does not have the required role.');
         return false;
       }
     } else {
       // User is not logged in, redirect to the login page
+      alert('Please login to ocntinue');
       this.router.navigate(['/login']);
       console.log('User is not logged in. Redirecting to login page.');
       return false;

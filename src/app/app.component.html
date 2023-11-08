@@ -100,14 +100,12 @@
         <li class="nav-item" *ngIf="userInfo.isLoggedin && userInfo.isUser">
           <a class="nav-link" [routerLink]="['Books', 'Cart']">Cart</a>
         </li>
-        <li class="nav-item" *ngIf="!userInfo.isLoggedin; else loggedInOption">
+        <li class="nav-item" *ngIf="!userInfo.isLoggedin">
           <a class="nav-link" [routerLink]="['login']">Log In</a>
         </li>
-        <ng-template #loggedInOption>
-          <li class="nav-item">
-            <a class="nav-link" (click)="logOut()">Log out</a>
-          </li>
-        </ng-template>
+        <li class="nav-item" *ngIf="userInfo.isLoggedin">
+          <a class="nav-link" (click)="logOut()">Log out</a>
+        </li>
       </ul>
     </div>
   </div>

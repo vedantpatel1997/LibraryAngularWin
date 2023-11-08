@@ -22,7 +22,7 @@ const routes: Routes = [
   },
   {
     path: 'User',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
 
     loadChildren: () =>
       import('./UserInfo/user-info.module').then((m) => m.UserInfoModule),

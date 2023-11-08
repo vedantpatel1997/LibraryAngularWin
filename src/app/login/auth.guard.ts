@@ -21,9 +21,11 @@ export class AuthGuard {
       return true; // User is authenticated, allow access
       console.log(true);
     } else {
-      this.router.navigate(['/login']);
       console.log(false);
       this.loginSvc.logOut();
+      this.loginSvc.logout();
+      alert('Please Login !');
+      this.router.navigate(['/login']);
       return false; // Redirect to the login page
     }
   }

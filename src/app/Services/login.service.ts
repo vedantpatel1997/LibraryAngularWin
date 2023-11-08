@@ -1,20 +1,39 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { APIResponse } from '../DTO/APIResponse';
 import { userCred } from '../DTO/userCred';
 import { Router } from '@angular/router';
 import { APIToken } from '../DTO/APIToken';
+import { User } from '../DTO/User';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
   curUser: Number | undefined;
+  curUserdata: User | undefined;
   bookApiUrl = environment.apiAddress + 'Authorize/';
   constructor(private http: HttpClient, private route: Router) {}
+  private loggedInSubject: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
 
+  get isLoggedIn(): Observable<boolean> {
+    return this.loggedInSubject.asObservable();
+  }
+
+  login() {
+    // Perform your login logic here
+    // Set user as logged in
+    this.loggedInSubject.next(true);
+  }
+
+  logout() {
+    // Perform your logout logic here
+    // Set user as logged out
+    this.loggedInSubject.next(false);
+  }
   generateToken(usercred: userCred): Observable<APIResponse> {
     // Prepare the request body with the user credentials
     const requestBody = {
@@ -42,10 +61,10 @@ export class LoginService {
 
   isLoggedin() {
     if (
-      this.getLoggedinUserId() &&
       (this.haveAccess('User') ||
         this.haveAccess('Admin') ||
-        this.haveAccess('Owner'))
+        this.haveAccess('Owner')) &&
+      this.getLoggedinUserId()
     ) {
       return true;
     }
@@ -92,6 +111,9 @@ export class LoginService {
     } catch (error) {
       // Handle any potential errors, such as invalid token format or JSON parsing errors
       console.error('Error while checking access:');
+      // this.logOut();
+      // this.logout();
+      return false;
     }
 
     // If any error occurred or access was not granted, return false
@@ -106,6 +128,6 @@ export class LoginService {
   logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-    this.route.navigateByUrl('/login');
+    this.route.navigateByUrl('');
   }
 }

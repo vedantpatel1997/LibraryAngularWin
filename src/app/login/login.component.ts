@@ -80,6 +80,7 @@ export class LoginComponent implements OnInit {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.loginSvc.saveTokens(APIResult.data);
+          this.loginSvc.login();
           if (this.loginSvc.haveAccess('Admin')) {
             console.log('Works');
             this.invalid = false;

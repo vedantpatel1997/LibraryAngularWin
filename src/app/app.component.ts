@@ -24,15 +24,24 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.routeChangeService.getRouteChangeObservable().subscribe(() => {
-      // Perform actions based on the current route.
+    // this.routeChangeService.getRouteChangeObservable().subscribe(() => {
+    //   // Perform actions based on the current route.
+    //   this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
+    //   this.userInfo.isUser = this.loginSvc.haveAccess('User');
+    //   this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
+    //   console.log('Behaviur changed');
+    // });
+    this.loginSvc.isLoggedIn.subscribe((loggedIn) => {
       this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
       this.userInfo.isUser = this.loginSvc.haveAccess('User');
       this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
+
+      console.log('Login Status', loggedIn);
     });
   }
 
   logOut() {
     this.loginSvc.logOut();
+    this.loginSvc.logout();
   }
 }
