@@ -95,8 +95,8 @@ export class PasswordComponent implements OnInit {
         error: (error) => {
           // Handle API call errors here
           this.bookSvc.showMessage(
-            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong !`,
-            'warning'
+            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong while getting the data !`,
+            'danger'
           );
           console.log(error);
           this.spinnerVisible = false;

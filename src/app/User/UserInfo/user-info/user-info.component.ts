@@ -93,8 +93,10 @@ export class UserInfoComponent {
       (error) => {
         // Handle network or unexpected errors here
         this.spinnerVisible = false;
-
-        console.log('Network Error:', error);
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
       }
     );
   }
@@ -148,6 +150,10 @@ export class UserInfoComponent {
         error: (error) => {
           // Handle API call errors here
           console.log(error);
+          this.bookSvc.showMessage(
+            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+            'danger'
+          );
           this.spinnerVisible = false;
         },
       });
