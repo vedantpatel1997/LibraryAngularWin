@@ -15,8 +15,7 @@ const routes: Routes = [
     path: 'Books',
     // canActivate: [AuthGuard],
 
-    loadChildren: () =>
-      import('./User/books.module').then((m) => m.BooksModule),
+    loadChildren: () => import('./User/User.module').then((m) => m.UserModule),
   },
   {
     path: 'Admin',
@@ -24,7 +23,7 @@ const routes: Routes = [
     canActivate: [roleGuard],
     data: { preload: false, role: 'Admin' },
     loadChildren: () =>
-      import('./Admin/Users/users.module').then((m) => m.UsersModule),
+      import('./Admin/Users/Admin.module').then((m) => m.AdminModule),
   },
   {
     path: 'login',
