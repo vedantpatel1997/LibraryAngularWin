@@ -1,6 +1,7 @@
 import { Category } from './Category';
 
 export interface Book {
+  id: number;
   bookId: number;
   title: string;
   author: string;
@@ -9,6 +10,7 @@ export interface Book {
   issuedQuantity: number;
   price: number;
   category: Category;
-  rentPeriod: number;
+  rentPeriod?: number;
   totalRentPrice: number;
+  categoryName?: string;
 }

@@ -3,44 +3,43 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { Book } from 'src/app/DTO/book';
-import { BooksService } from 'src/app/Services/books.service';
-
+import { User } from 'src/app/DTO/User';
+import { UsersService } from 'src/app/Services/users.service';
 @Component({
-  selector: 'app-books-admin',
-  templateUrl: './books-admin.component.html',
-  styleUrls: ['./books-admin.component.css'],
+  selector: 'app-users-admin',
+  templateUrl: './users-admin.component.html',
+  styleUrls: ['./users-admin.component.css'],
 })
-export class BooksAdminComponent {
-  books: Book[] = [];
+export class UsersAdminComponent {
+  users: User[] = [];
 
   displayedColumns: string[] = [
     'id',
-    'title',
-    'author',
-    'categoryName',
-    'price',
-    'totalQuantity',
-    'availableQuantity',
-    'issuedQuantity',
+    'firstName',
+    'lastName',
+    'dob',
+    'gender',
+    'email',
+    'phone',
+    'username',
+    'role',
     'action',
   ];
-  dataSource: MatTableDataSource<Book>;
+  dataSource: MatTableDataSource<User>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private bookSvc: BooksService, private router: Router) {
+  constructor(private userSvc: UsersService, private router: Router) {
     // Assign the data to the data source for the table to render
-    this.bookSvc.getAllBooks().subscribe({
+    this.userSvc.GetAllUsers().subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
-          this.books = APIResult.data;
-          this.books.forEach((cur, i) => {
-            cur.categoryName = cur.category.name;
+          this.users = APIResult.data;
+          this.users.forEach((cur, i) => {
             cur.id = i + 1;
           });
-          this.dataSource = new MatTableDataSource(this.books);
+          this.dataSource = new MatTableDataSource(this.users);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           console.log(APIResult);
@@ -62,10 +61,10 @@ export class BooksAdminComponent {
     }
   }
 
-  showBookDetails(bookId: number) {
+  showUserDetails(userId: number) {
     // Here, you can navigate to a book details page or display a dialog with book details.
     // You have access to the bookId to load the details of the selected book.
-    console.log('BookId: ', bookId);
-    this.router.navigateByUrl(`Admin/Books/Info/${bookId}`);
+    console.log('UserId: ', userId);
+    this.router.navigateByUrl(`Admin/Users/Info/${userId}`);
   }
 }

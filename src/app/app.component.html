@@ -9,6 +9,7 @@
             routerLinkActive="active"
             *ngIf="!userInfo.isAdmin"
             [routerLink]="['']"
+            routerLinkActive="active"
             >Home</a
           >
         </li>
@@ -18,6 +19,7 @@
             routerLinkActive="active"
             *ngIf="!userInfo.isAdmin"
             [routerLink]="['Books']"
+            routerLinkActive="active"
             >Books</a
           >
         </li>
@@ -27,23 +29,42 @@
             routerLinkActive="active"
             *ngIf="userInfo.isLoggedin && userInfo.isUser"
             [routerLink]="['Books', 'MyBooks']"
+            routerLinkActive="active"
             >My Books</a
           >
         </li>
 
         <li class="nav-item" *ngIf="userInfo.isAdmin">
-          <a class="nav-link" [routerLink]="['Admin', 'Dashboard']"
+          <a
+            class="nav-link"
+            [routerLink]="['Admin', 'Dashboard']"
+            routerLinkActive="active"
             >Dashboard</a
           >
         </li>
         <li class="nav-item" *ngIf="userInfo.isAdmin">
-          <a class="nav-link" [routerLink]="['Admin', 'Users']">Users</a>
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            [routerLink]="['Admin', 'Users']"
+            >Users</a
+          >
         </li>
         <li class="nav-item" *ngIf="userInfo.isAdmin">
-          <a class="nav-link" [routerLink]="['Admin', 'Books']">Books</a>
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            [routerLink]="['Admin', 'Books']"
+            >Books</a
+          >
         </li>
         <li class="nav-item" *ngIf="userInfo.isAdmin">
-          <a class="nav-link" [routerLink]="['Admin', 'Reports']">Reports</a>
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            [routerLink]="['Admin', 'Reports']"
+            >Reports</a
+          >
         </li>
       </ul>
 
@@ -51,6 +72,7 @@
         `
         <li class="nav-item dropdown-center" *ngIf="userInfo.isLoggedin">
           <a
+            routerLinkActive="active"
             class="nav-link dropdown-toggle"
             role="button"
             data-bs-toggle="dropdown"
@@ -97,13 +119,22 @@
           </ul>
         </li>
         <li class="nav-item" *ngIf="userInfo.isLoggedin && userInfo.isUser">
-          <a class="nav-link" [routerLink]="['Books', 'Cart']">Cart</a>
+          <a
+            class="nav-link"
+            [routerLink]="['Books', 'Cart']"
+            routerLinkActive="active"
+            >Cart</a
+          >
         </li>
         <li class="nav-item" *ngIf="!userInfo.isLoggedin">
-          <a class="nav-link" [routerLink]="['login']">Log In</a>
+          <a class="nav-link" [routerLink]="['login']" routerLinkActive="active"
+            >Log In</a
+          >
         </li>
         <li class="nav-item" *ngIf="userInfo.isLoggedin">
-          <a class="nav-link" (click)="logOut()">Log out</a>
+          <a class="nav-link" (click)="logOut()" routerLinkActive="active"
+            >Log out</a
+          >
         </li>
       </ul>
     </div>
