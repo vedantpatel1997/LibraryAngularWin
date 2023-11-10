@@ -5,6 +5,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { of, switchMap } from 'rxjs';
 import { UsersService } from '../Services/users.service';
+import { BooksService } from '../Services/books.service';
 
 @Component({
   selector: 'app-login',
@@ -47,11 +48,11 @@ import { UsersService } from '../Services/users.service';
   ],
 })
 export class LoginComponent implements OnInit {
-  invalid: boolean = false;
   spinnerVisible: boolean = false;
 
   constructor(
     private loginSvc: LoginService,
+    private bookSvc: BooksService,
     private route: Router,
     private userService: UsersService
   ) {}
@@ -86,8 +87,6 @@ export class LoginComponent implements OnInit {
           if (APIResult.isSuccess) {
             this.loginSvc.saveTokens(APIResult.data);
             if (this.loginSvc.haveAccess('Admin')) {
-              console.log('Works');
-              this.invalid = false;
               this.route.navigate(['/Admin/Dashboard']);
             } else if (this.loginSvc.haveAccess('User')) {
               this.route.navigate(['']);
@@ -104,7 +103,7 @@ export class LoginComponent implements OnInit {
             // Return an empty observable if no second API call is needed
             return of(undefined);
           } else {
-            this.invalid = true;
+            this.bookSvc.showMessage('Invalid Credentails');
             return of(undefined);
           }
         })
@@ -122,7 +121,10 @@ export class LoginComponent implements OnInit {
         (error) => {
           this.spinnerVisible = false;
           // Handle errors
-          console.error('Error:', error);
+          this.bookSvc.showMessage(
+            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+            'danger'
+          );
         }
       );
   }

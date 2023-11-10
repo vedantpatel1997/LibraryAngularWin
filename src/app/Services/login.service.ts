@@ -15,7 +15,15 @@ export class LoginService {
   private curUser: Number | undefined;
   private curUserdata: User | undefined;
   private bookApiUrl = environment.apiAddress + 'Authorize/';
-  constructor(private http: HttpClient, private route: Router) {}
+  constructor(private http: HttpClient, private route: Router) {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      // Assuming 'User' is the correct type for your user data
+      this.curUserdata = JSON.parse(userData) as User;
+    } else {
+      this.curUserdata = null; // or handle the absence of user data appropriately
+    }
+  }
   private loggedInSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
 
@@ -111,8 +119,8 @@ export class LoginService {
     } catch (error) {
       // Handle any potential errors, such as invalid token format or JSON parsing errors
       console.error('Error while checking access:');
-      // this.logOut();
-      // this.logout();
+      this.logOut();
+      this.logout();
       return false;
     }
 
@@ -126,6 +134,7 @@ export class LoginService {
   }
   saveUserData(userData: User) {
     this.curUserdata = userData;
+    localStorage.setItem('userData', JSON.stringify(userData));
   }
 
   getUserData() {
@@ -135,6 +144,7 @@ export class LoginService {
   logOut() {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userData');
     this.route.navigateByUrl('');
   }
 }

@@ -1,0 +1,43 @@
+.custom-box {
+  border: 1px solid #ccc; /* Add your desired border styles */
+  border-radius: 9px;
+  padding: 15px;
+  background-color: #f8f8f8; /* Add your desired background color */
+  height: 150px; /* Set the fixed height as needed */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Custom CSS class for highlighting cart items with a penalty */
+.cart-penalty {
+  background-color: #f8d7da; /* Background color for cart with penalty */
+  border: 1px solid #dc3545; /* Border color for cart with penalty */
+  padding: 10px; /* Padding to provide spacing and better visibility */
+}
+/* Add this CSS to your component's stylesheet or a global stylesheet */
+.form-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Ensure the container covers the full form area */
+  background-color: rgba(255, 255, 255, 0.5); /* Increase the transparency */
+}
+
+.transparent {
+  opacity: 0.5;
+  transition: opacity 1s;
+}
+
+.spinner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Ensure it's above the form */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none; /* Remove background from the spinner-container */
+}

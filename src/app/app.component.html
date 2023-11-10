@@ -6,9 +6,8 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            routerLinkActive="active"
             *ngIf="!userInfo.isAdmin"
-            [routerLink]="['']"
+            [routerLink]="['Home']"
             routerLinkActive="active"
             >Home</a
           >
@@ -16,20 +15,19 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            routerLinkActive="active"
             *ngIf="!userInfo.isAdmin"
             [routerLink]="['Books']"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             >Books</a
           >
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
-            routerLinkActive="active"
             *ngIf="userInfo.isLoggedin && userInfo.isUser"
-            [routerLink]="['Books', 'MyBooks']"
             routerLinkActive="active"
+            [routerLink]="['Books', 'MyBooks']"
             >My Books</a
           >
         </li>
@@ -69,7 +67,9 @@
       </ul>
 
       <ul class="navbar-nav ms-auto">
-        `
+        <li *ngIf="userInfo.isAdmin">
+          <span class="nav-link">Welcome Admin</span>
+        </li>
         <li class="nav-item dropdown-center" *ngIf="userInfo.isLoggedin">
           <a
             routerLinkActive="active"

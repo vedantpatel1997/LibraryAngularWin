@@ -97,4 +97,9 @@ export class BooksService {
       `${this.bookUserTransactionApiUrl}getBooksHistoryByUserId?userId=${userId}`
     );
   }
+  SendReminderForBooks(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}SendReminderForPendingBooks?userId=${userId}`
+    );
+  }
 }

@@ -11,53 +11,71 @@ import { UpdatePassword } from '../DTO/UpdatePassword';
   providedIn: 'root',
 })
 export class UsersService {
-  bookApiUrl = environment.apiAddress + 'Users/';
+  userApiUrl = environment.apiAddress + 'Users/';
 
   constructor(private http: HttpClient) {}
 
   GetAllUsers(): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.bookApiUrl + 'GetAllUsers');
+    return this.http.get<APIResponse>(this.userApiUrl + 'GetAllUsers');
   }
 
   getUserByUserId(userId: number): Observable<APIResponse> {
-    return this.http.get<APIResponse>(this.bookApiUrl + `GetById?id=${userId}`);
+    return this.http.get<APIResponse>(this.userApiUrl + `GetById?id=${userId}`);
   }
 
   createUser(userData: User): Observable<APIResponse> {
-    return this.http.post<APIResponse>(`${this.bookApiUrl}Create`, userData);
+    return this.http.post<APIResponse>(`${this.userApiUrl}Create`, userData);
   }
 
   updateUser(userData: User, userId: number): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      `${this.bookApiUrl}Update?id=${userId}`,
+      `${this.userApiUrl}Update?id=${userId}`,
       userData
     );
   }
 
   createAddress(addressData: Address, userId: number): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      `${this.bookApiUrl}CreateAddress?userId=${userId}`,
+      `${this.userApiUrl}CreateAddress?userId=${userId}`,
       addressData
     );
   }
 
   GetAddressByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
-      `${this.bookApiUrl}GetAddressByUserId?userId=${userId}`
+      `${this.userApiUrl}GetAddressByUserId?userId=${userId}`
     );
   }
 
   updateAddress(addressData: Address, userId: number): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      `${this.bookApiUrl}UpdateAddress?userId=${userId}`,
+      `${this.userApiUrl}UpdateAddress?userId=${userId}`,
       addressData
     );
   }
 
   updatePassword(password: UpdatePassword): Observable<APIResponse> {
     return this.http.post<APIResponse>(
-      `${this.bookApiUrl}UpdatePassword`,
+      `${this.userApiUrl}UpdatePassword`,
       password
+    );
+  }
+
+  SendUserInfo(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.userApiUrl}SendInfo?userId=${userId}`
+    );
+  }
+
+  SendResetPassword(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.userApiUrl}SendResetPassword?userId=${userId}`
+    );
+  }
+
+  DeleteUser(userId: number): Observable<APIResponse> {
+    return this.http.delete<APIResponse>(
+      `${this.userApiUrl}Delete?id=${userId}`
     );
   }
 }

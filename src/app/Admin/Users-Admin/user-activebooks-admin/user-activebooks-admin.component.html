@@ -3,7 +3,7 @@
     <a
       class="nav-link"
       routerLinkActive="active"
-      [routerLink]="['/Admin/Users/Info', id]"
+      [routerLink]="['/Admin/Users/Info', curUserId]"
       >User Info</a
     >
   </li>
@@ -11,15 +11,15 @@
     <a
       class="nav-link"
       routerLinkActive="active"
-      [routerLink]="['/Admin/Users/ActiveBooks', id]"
-      >Active Books</a
+      [routerLink]="['/Admin/Users/ActiveBooks', curUserId]"
+      >Issued Books</a
     >
   </li>
   <li class="nav-item">
     <a
       class="nav-link"
       routerLinkActive="active"
-      [routerLink]="['/Admin/Users/History', id]"
+      [routerLink]="['/Admin/Users/History', curUserId]"
       >User History</a
     >
   </li>
@@ -27,16 +27,134 @@
     <a
       class="nav-link"
       routerLinkActive="active"
-      [routerLink]="['/Admin/Users/SendDetails', id]"
-      >Send Info</a
+      [routerLink]="['/Admin/Users/SendDetails', curUserId]"
+      >Actions</a
     >
   </li>
   <li class="nav-item">
     <a
       class="nav-link"
       routerLinkActive="active"
-      [routerLink]="['/Admin/Users/Delete', id]"
+      [routerLink]="['/Admin/Users/Delete', curUserId]"
       >Delete</a
     >
   </li>
 </ul>
+<h2 class="my-4">Issued Books</h2>
+<div>
+  <div id="liveAlertPlaceholder"></div>
+  <div class="form-container row" [ngClass]="{ transparent: spinnerVisible }">
+    <div class="spinner-container" *ngIf="spinnerVisible">
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="myBooks.length == 0" class="row mt-4">
+      <div class="col-12">
+        <div class="custom-box">
+          <h2>User does't have any issued book</h2>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="myBooks.length !== 0" class="col-8 pe-3">
+      <div class="rounded p-3 border">
+        <div class="cart-item">
+          <!-- Item List -->
+          <div *ngFor="let cur of myBooks">
+            <div
+              class="cart-item-container border rounded p-3 mb-3 position-relative"
+            >
+              <div class="row">
+                <div class="col-2">
+                  <img
+                    class="img-fluid"
+                    src="https://m.media-amazon.com/images/I/61y6sHSiHhL._SL1500_.jpg"
+                    alt="Book 1"
+                  />
+                </div>
+                <div class="col-6">
+                  <h4>
+                    {{ cur.book?.title }}
+                    <h6>({{ cur.book?.category?.name }})</h6>
+                  </h4>
+                  <p>
+                    {{ cur.book?.author }}
+                  </p>
+
+                  <p>
+                    <strong>Issued On: </strong
+                    >{{ cur.issueDate ? formatDate(cur.issueDate) : 0 }} for
+                    <strong>{{ cur.days }} </strong>
+                    Days
+                  </p>
+
+                  <button
+                    type="button"
+                    class="btn btn-outline-success"
+                    (click)="submitBook(cur.bookId)"
+                  >
+                    Submit Book
+                  </button>
+                </div>
+                <div class="col-3">
+                  <div>
+                    <strong>Estimated Return Date:</strong>
+                    <p>
+                      {{
+                        cur.issueDate
+                          ? formatDate(
+                              getEstimateReturnDate(cur.days, cur.issueDate)
+                            )
+                          : 0
+                      }}
+                    </p>
+                  </div>
+                  <div>
+                    <strong>Days Remaining</strong>
+                    <h3
+                      class="fw-bold"
+                      [ngClass]="{
+                        'text-danger': cur.issueDate
+                          ? calculateDaysRemaining(
+                              getEstimateReturnDate(cur.days, cur.issueDate)
+                            ) < 0
+                          : false
+                      }"
+                    >
+                      {{
+                        cur.issueDate
+                          ? calculateDaysRemaining(
+                              getEstimateReturnDate(cur.days, cur.issueDate)
+                            )
+                          : 0
+                      }}
+                    </h3>
+                  </div>
+                  <div
+                    *ngIf="
+                      cur.issueDate
+                        ? calculateDaysRemaining(
+                            getEstimateReturnDate(cur.days, cur.issueDate)
+                          ) < 0
+                        : false
+                    "
+                    class="alert alert-danger"
+                    role="alert"
+                  >
+                    <i
+                      class="fa-solid fa-triangle-exclamation fa-lg"
+                      style="color: #ed0c0c"
+                    ></i
+                    >&nbsp; Penalty Applied
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

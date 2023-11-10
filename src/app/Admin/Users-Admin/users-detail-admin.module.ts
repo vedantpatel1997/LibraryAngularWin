@@ -13,6 +13,7 @@ import { UserInfoAdminComponent } from './user-info-admin/user-info-admin.compon
 import { UserDeleteAdminComponent } from './user-delete-admin/user-delete-admin.component';
 import { UserActivebooksAdminComponent } from './user-activebooks-admin/user-activebooks-admin.component';
 import { UserMailAdminComponent } from './user-mail-admin/user-mail-admin.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: UsersAdminComponent },
@@ -40,6 +41,8 @@ const routes: Routes = [
     MatSortModule,
     MatPaginatorModule,
     MatIconModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
 })
 export class UsersDetailAdminModule {}

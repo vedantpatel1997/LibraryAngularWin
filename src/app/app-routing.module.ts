@@ -9,6 +9,11 @@ import { CommonModule } from '@angular/common';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'Home',
+    pathMatch: 'full',
+  },
+  {
+    path: 'Home',
     component: DashboardComponent,
   },
   {
