@@ -9,6 +9,22 @@ import { Book } from 'src/app/DTO/book';
 @Component({
   selector: 'app-error',
   templateUrl: './books.component.html',
+  styles: [
+    `
+      .card:hover {
+        background-color: #f2f2f2; /* Light grey background color on hover */
+        transition: background-color 0.3s ease; /* Add a smooth transition effect */
+      }
+      .low-stock-badge {
+        background-color: red;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        margin-left: 10px; /* Add margin to the left of the badge */
+      }
+    `,
+  ],
 })
 export class BooksComponent implements OnInit {
   books: Book[] = [];
