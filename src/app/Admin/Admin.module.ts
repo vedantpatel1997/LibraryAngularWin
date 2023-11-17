@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
-import { ReportsAdminComponent } from './reports-Admin/reports-admin.component';
 import { AuthGuard } from '../login/auth.guard';
 import { roleGuard } from '../Shared/role.guard';
+import { AddNewBookComponent } from './add-new-book/add-new-book.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -26,11 +27,16 @@ const routes: Routes = [
         (m) => m.UsersDetailAdminModule
       ),
   },
-  { path: 'Reports', component: ReportsAdminComponent },
+  { path: 'AddBook', component: AddNewBookComponent },
 ];
 
 @NgModule({
-  declarations: [DashboardAdminComponent, ReportsAdminComponent],
-  imports: [CommonModule, RouterModule.forChild(routes)],
+  declarations: [DashboardAdminComponent, AddNewBookComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class AdminModule {}

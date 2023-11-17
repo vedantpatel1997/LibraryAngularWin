@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BookDeleteAdminComponent } from './book-delete-admin/book-delete-admin.component';
 import { BookActiveuserAdminComponent } from './book-activeuser-admin/book-activeuser-admin.component';
 import { BookHistoryAdminComponent } from './book-history-admin/book-history-admin.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const routes: Routes = [
   { path: '', component: BooksAdminComponent },
@@ -37,6 +38,8 @@ const routes: Routes = [
     MatSortModule,
     MatPaginatorModule,
     MatIconModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
 })
 export class BookDetailAdminModule {}

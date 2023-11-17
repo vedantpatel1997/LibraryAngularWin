@@ -1,16 +1,18 @@
 import { Category } from './Category';
 
 export interface Book {
-  id: number;
-  bookId: number;
+  id?: number;
+  bookId?: number;
   title: string;
   author: string;
+  imageURL: string;
   totalQuantity: number;
-  availableQuantity: number;
-  issuedQuantity: number;
+  availableQuantity?: number;
+  issuedQuantity?: number;
   price: number;
-  category: Category;
+  category?: Category;
+  categoryId: number;
   rentPeriod?: number;
-  totalRentPrice: number;
+  totalRentPrice?: number;
   categoryName?: string;
 }

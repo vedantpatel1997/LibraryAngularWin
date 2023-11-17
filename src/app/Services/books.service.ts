@@ -16,6 +16,9 @@ export class BooksService {
 
   constructor(private http: HttpClient) {}
 
+  createBook(bookData: Book): Observable<APIResponse> {
+    return this.http.post<APIResponse>(`${this.bookApiUrl}Create`, bookData);
+  }
   getAllBooks(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.bookApiUrl + 'GetAllBooks');
   }
@@ -52,6 +55,22 @@ export class BooksService {
   getBooksByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookUserTransactionApiUrl}GetBooksByUserID?userId=${userId}`
+    );
+  }
+  GetUsersByBookID(bookId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GetUsersByBookID?bookId=${bookId}`
+    );
+  }
+  getBookId(bookId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookApiUrl}GetBookById?id=${bookId}`
+    );
+  }
+  updateBook(bookId: number, book: Book): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.bookApiUrl}Update?id=${bookId}`,
+      book
     );
   }
   getCartItemsByUserId(userId: number): Observable<APIResponse> {
@@ -97,9 +116,27 @@ export class BooksService {
       `${this.bookUserTransactionApiUrl}getBooksHistoryByUserId?userId=${userId}`
     );
   }
+  getUserHistoryByBookId(bookId: number) {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GetUsersHistoryByBookId?bookId=${bookId}`
+    );
+  }
   SendReminderForBooks(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookUserTransactionApiUrl}SendReminderForPendingBooks?userId=${userId}`
+    );
+  }
+  SendReminderForPendingBook(
+    userId: number,
+    bookId: number
+  ): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}SendReminderForPendingBook?userId=${userId}&bookId=${bookId}`
+    );
+  }
+  DeleteBook(bookId: number): Observable<APIResponse> {
+    return this.http.delete<APIResponse>(
+      `${this.bookApiUrl}Delete?id=${bookId}`
     );
   }
 }

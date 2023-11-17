@@ -40,7 +40,7 @@
     <div class="col-md-4 mb-3" *ngFor="let book of getFilteredProducts()">
       <div class="card">
         <img
-          src="https://m.media-amazon.com/images/I/61y6sHSiHhL._SL1500_.jpg"
+          src="{{ book.imageURL }}"
           alt="{{ book.title }}"
           class="card-img-top"
           style="height: 200px"

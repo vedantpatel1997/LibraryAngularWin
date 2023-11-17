@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Category } from 'src/app/DTO/Category';
-import { User } from 'src/app/DTO/User';
 import { Book } from 'src/app/DTO/book';
 import { BooksService } from 'src/app/Services/books.service';
 import { CategoryService } from 'src/app/Services/category.service';
@@ -10,37 +9,30 @@ import { LoginService } from 'src/app/Services/login.service';
 import { UsersService } from 'src/app/Services/users.service';
 
 @Component({
-  selector: 'app-book-info-admin',
-  templateUrl: './book-info-admin.component.html',
-  styleUrls: ['./book-info-admin.component.css'],
+  selector: 'app-add-new-book',
+  templateUrl: './add-new-book.component.html',
+  styleUrls: ['./add-new-book.component.css'],
 })
-export class BookInfoAdminComponent {
+export class AddNewBookComponent {
   spinnerVisible: boolean = false;
-  curBookId: number;
-  bookData: Book;
   categoryData: Category[];
-  updateFrom: boolean = false;
 
   constructor(
-    private userSvc: UsersService,
-    private loginSvc: LoginService,
     private bookSvc: BooksService,
     private categorySvc: CategoryService,
     private route: ActivatedRoute
-  ) {
-    this.route.params.subscribe((p) => {
-      this.curBookId = p['id'];
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.disableUpdate();
+    this.spinnerVisible = true;
     this.categorySvc.getAllCategories().subscribe(
       (APIResult) => {
         if (APIResult.isSuccess) {
           this.categoryData = APIResult.data;
+          this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
+          this.bookSvc.showMessage(APIResult.errorMessage, 'danger');
+          this.spinnerVisible = false;
         }
       },
       (error) => {
@@ -66,41 +58,9 @@ export class BookInfoAdminComponent {
     category: new FormControl('', [Validators.required]),
   });
 
-  getBookData() {
-    this.spinnerVisible = true;
-    this.bookSvc.getBookId(this.curBookId).subscribe(
-      (APIResult) => {
-        if (APIResult.isSuccess) {
-          this.bookData = APIResult.data;
-          this.bookForm.patchValue({
-            title: this.bookData.title,
-            author: this.bookData.author,
-            totalQuantity: this.bookData.totalQuantity,
-            category: this.bookData.categoryId,
-            price: this.bookData.price,
-            imageURL: this.bookData.imageURL,
-          });
-          this.spinnerVisible = false;
-        } else {
-          console.log(APIResult);
-          this.spinnerVisible = false;
-        }
-      },
-      (error) => {
-        // Handle network or unexpected errors here
-        this.spinnerVisible = false;
-        this.bookSvc.showMessage(
-          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
-          'danger'
-        );
-      }
-    );
-  }
-
   save() {
     if (this.bookForm.valid) {
       let bookData: Book = {
-        bookId: this.curBookId,
         title: this.bookForm.controls['title'].value,
         author: this.bookForm.controls['author'].value,
         totalQuantity: this.bookForm.controls['totalQuantity'].value,
@@ -111,12 +71,14 @@ export class BookInfoAdminComponent {
 
       this.spinnerVisible = true;
 
-      this.bookSvc.updateBook(this.curBookId, bookData).subscribe({
+      this.bookSvc.createBook(bookData).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
-            this.bookSvc.showMessage(`Book succesfully Updated.`, 'success');
-            this.bookForm.disable();
-            this.updateFrom = false;
+            this.bookSvc.showMessage(
+              `${APIResult.data.title} Succesfully Added.`,
+              'success'
+            );
+            this.bookForm.reset();
             this.spinnerVisible = false;
           } else {
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
@@ -134,18 +96,5 @@ export class BookInfoAdminComponent {
         },
       });
     }
-  }
-
-  enableUpdate() {
-    this.bookForm.enable();
-    this.updateFrom = true;
-  }
-
-  disableUpdate() {
-    this.getBookData();
-    this.bookForm.disable();
-    this.updateFrom = false;
-    let errorArea = document.getElementById('liveAlertPlaceholder');
-    if (errorArea !== null) errorArea.innerHTML = '';
   }
 }
