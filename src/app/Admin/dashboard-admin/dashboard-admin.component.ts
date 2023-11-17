@@ -9,7 +9,12 @@ import { LoginService } from 'src/app/Services/login.service';
 })
 export class DashboardAdminComponent {
   curUserData: User;
-  constructor(loginSvc: LoginService) {
-    this.curUserData = loginSvc.getUserData();
+
+  constructor(private loginSvc: LoginService) {}
+
+  ngOnInit() {
+    this.loginSvc.isLoggedIn.subscribe((loggedIn) => {
+      this.curUserData = this.loginSvc.getUserData();
+    });
   }
 }

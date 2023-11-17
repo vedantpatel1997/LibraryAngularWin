@@ -13,6 +13,7 @@ import { BooksService } from 'src/app/Services/books.service';
 })
 export class BooksAdminComponent {
   books: Book[] = [];
+  spinnerVisible: boolean = false;
 
   displayedColumns: string[] = [
     'id',
@@ -32,6 +33,8 @@ export class BooksAdminComponent {
 
   constructor(private bookSvc: BooksService, private router: Router) {
     // Assign the data to the data source for the table to render
+
+    this.spinnerVisible = true;
     this.bookSvc.getAllBooks().subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
@@ -43,12 +46,18 @@ export class BooksAdminComponent {
           this.dataSource = new MatTableDataSource(this.books);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          console.log(APIResult);
+          this.spinnerVisible = false;
         }
+        this.spinnerVisible = false;
       },
       error: (error) => {
         // Handle the error here
         console.log(error);
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
+        this.spinnerVisible = false;
       },
     });
   }

@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { User } from 'src/app/DTO/User';
+import { BooksService } from 'src/app/Services/books.service';
 import { UsersService } from 'src/app/Services/users.service';
 @Component({
   selector: 'app-users-admin',
@@ -12,6 +13,7 @@ import { UsersService } from 'src/app/Services/users.service';
 })
 export class UsersAdminComponent {
   users: User[] = [];
+  spinnerVisible: boolean = false;
 
   displayedColumns: string[] = [
     'id',
@@ -30,8 +32,13 @@ export class UsersAdminComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private userSvc: UsersService, private router: Router) {
+  constructor(
+    private userSvc: UsersService,
+    private router: Router,
+    private bookSvc: BooksService
+  ) {
     // Assign the data to the data source for the table to render
+    this.spinnerVisible = true;
     this.userSvc.GetAllUsers().subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
@@ -42,11 +49,17 @@ export class UsersAdminComponent {
           this.dataSource = new MatTableDataSource(this.users);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          console.log(APIResult);
+          this.spinnerVisible = false;
         }
+        this.spinnerVisible = false;
       },
       error: (error) => {
         // Handle the error here
+        bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
+        this.spinnerVisible = false;
         console.log(error);
       },
     });
