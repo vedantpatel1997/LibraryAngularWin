@@ -15,4 +15,5 @@ export interface Book {
   rentPeriod?: number;
   totalRentPrice?: number;
   categoryName?: string;
+  isBestSeller?: boolean;
 }

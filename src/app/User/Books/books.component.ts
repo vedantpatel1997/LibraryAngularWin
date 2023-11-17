@@ -23,6 +23,11 @@ import { Book } from 'src/app/DTO/book';
         font-size: 12px;
         margin-left: 10px; /* Add margin to the left of the badge */
       }
+      .bestSeller-stock-badge {
+        padding: 4px 8px !important;
+        border-radius: 4px !important;
+        font-size: 14px !important;
+      }
     `,
   ],
 })

@@ -41,7 +41,15 @@
         *ngFor="let book of getFilteredProducts()"
         class="col-lg-4 col-md-6 mb-3"
       >
-        <div class="card h-80" style="max-width: 400px; overflow: hidden">
+        <div
+          class="card h-80"
+          style="max-width: 400px; overflow: hidden position-relative"
+        >
+          <span
+            *ngIf="book?.isBestSeller"
+            class="badge bestSeller-stock-badge text-bg-warning position-absolute top-0 end-0"
+            >Best Rental</span
+          >
           <div class="row g-0">
             <div class="col-md-4">
               <img
