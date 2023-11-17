@@ -38,8 +38,6 @@ export class AppComponent implements OnInit {
       this.userInfo.isUser = this.loginSvc.haveAccess('User');
       this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
       this.curUser = this.loginSvc.getUserData();
-      console.log('Login Status', loggedIn);
-      console.log('Cur User: ', this.curUser);
     });
   }
 

@@ -176,7 +176,7 @@ export class CartComponent implements OnInit {
           if (APIResult.isSuccess) {
             this.getBookData();
             this.bookSvc.showMessage(
-              'Purchase Successful!',
+              'Book rented successful!',
               'success',
               'TOPLevel'
             );

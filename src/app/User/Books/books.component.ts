@@ -86,7 +86,7 @@ export class BooksComponent implements OnInit {
 
   addToCart(bookId: number) {
     if (!this.loginSvc.isLoggedin()) {
-      this.booksSvc.showMessage('Please Login to add book.');
+      this.booksSvc.showMessage('Please login to add book in the cart');
       return;
     }
     let userId = Number(this.loginSvc.getLoggedinUserId());
@@ -95,7 +95,7 @@ export class BooksComponent implements OnInit {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.booksSvc.showMessage(
-            'Item added to cart successfully!',
+            'Book added to cart successfully!',
             'success'
           );
         }
