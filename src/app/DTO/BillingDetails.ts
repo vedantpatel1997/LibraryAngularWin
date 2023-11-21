@@ -29,6 +29,7 @@ export interface BillingBooksInfo {
   bookName?: string;
   bookAuthor?: string;
   bookCategory?: string;
+  bookImageUrl?: string;
   rentDays: number;
   estimatedReturnDate: string;
   bookOriginalPrice: number;

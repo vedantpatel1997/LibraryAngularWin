@@ -157,4 +157,9 @@ export class BooksService {
       `${this.bookUserTransactionApiUrl}GetBillByBillID?billId=${billId}`
     );
   }
+  SendBill(userId: number, billHtml: string): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}SendBill?userId=${userId}&billHtml=${billHtml}`
+    );
+  }
 }
