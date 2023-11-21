@@ -5,6 +5,7 @@ import { Book } from '../DTO/book';
 import { environment } from '../environments/environment';
 import { APIResponse } from '../DTO/APIResponse';
 import { IssueBook } from '../DTO/IssueBook';
+import { BillingDeatils } from '../DTO/BillingDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -137,6 +138,23 @@ export class BooksService {
   DeleteBook(bookId: number): Observable<APIResponse> {
     return this.http.delete<APIResponse>(
       `${this.bookApiUrl}Delete?id=${bookId}`
+    );
+  }
+  GenerateBill(billingDetails: BillingDeatils): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GenerateBill`,
+      billingDetails
+    );
+  }
+
+  GetAllBillsByUserId(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GetBillsByUserID?userId=${userId}`
+    );
+  }
+  GetBillByBillId(billId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.bookUserTransactionApiUrl}GetBillByBillID?billId=${billId}`
     );
   }
 }

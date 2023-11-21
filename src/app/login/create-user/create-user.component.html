@@ -30,7 +30,7 @@
             userForm.controls['firstName'].touched
           "
         >
-          Enter First Name
+          Enter first name
         </div>
         <div
           class="text-danger"
@@ -39,7 +39,7 @@
             userForm.controls['firstName'].touched
           "
         >
-          Please Enter at least 3 characters
+          Please enter at least 3 characters
         </div>
       </div>
       <div class="col-md-4">
@@ -57,7 +57,7 @@
             userForm.controls['lastName'].touched
           "
         >
-          Enter Last Name
+          Enter last name
         </div>
         <div
           class="text-danger"
@@ -66,7 +66,7 @@
             userForm.controls['lastName'].touched
           "
         >
-          Please Enter at least 3 characters
+          Please enter at least 3 characters
         </div>
       </div>
       <div class="col-md-4">
@@ -77,6 +77,24 @@
           class="form-control"
           id="username"
         />
+        <div
+          class="text-danger"
+          *ngIf="
+            userForm.controls['username'].hasError('required') &&
+            userForm.controls['username'].touched
+          "
+        >
+          Enter username
+        </div>
+        <div
+          class="text-danger"
+          *ngIf="
+            userForm.controls['username'].hasError('minlength') &&
+            userForm.controls['username'].touched
+          "
+        >
+          Please enter at least 3 characters
+        </div>
       </div>
       <div class="col-md-4">
         <label for="gender" class="form-label">Gender</label>
@@ -111,7 +129,7 @@
             userForm.controls['dob'].touched
           "
         >
-          Date of Birth is required
+          Date of birth is required
         </div>
       </div>
 
@@ -139,7 +157,7 @@
             userForm.controls['email'].touched
           "
         >
-          Enter Email
+          Enter email
         </div>
         <div
           class="text-danger"
@@ -166,7 +184,7 @@
             userForm.controls['phone'].touched
           "
         >
-          Enter Phone Number
+          Enter phone number
         </div>
         <div
           class="text-danger"
@@ -236,7 +254,7 @@
           Submit
         </button>
         <p *ngIf="!userForm.valid" class="text-center">
-          Please Fill All Above fields to submit
+          Please fill all above fields to submit
         </p>
       </div>
     </form>

@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  BillingBooksInfo,
+  BillingDeatils,
+  BillingSummary,
+} from 'src/app/DTO/BillingDetails';
 import { BillingInfo } from 'src/app/DTO/BillingInfo';
 import { IssueBook } from 'src/app/DTO/IssueBook';
+import { User } from 'src/app/DTO/User';
 import { Book } from 'src/app/DTO/book';
 import { BooksService } from 'src/app/Services/books.service';
 import { LoginService } from 'src/app/Services/login.service';
@@ -15,7 +21,9 @@ export class CartComponent implements OnInit {
   error: boolean = false;
   cartItems: Book[] = [];
   curUserId: any;
+  user: User;
   spinnerVisible: boolean = false;
+  private taxRate: number = 0.13;
 
   billingInfo: BillingInfo = {
     quantity: 0,
@@ -29,6 +37,7 @@ export class CartComponent implements OnInit {
 
   constructor(private bookSvc: BooksService, private loginSvc: LoginService) {
     this.curUserId = Number(loginSvc.getLoggedinUserId());
+    this.user = loginSvc.getUserData();
   }
   ngOnInit(): void {
     this.getBookData();
@@ -78,7 +87,7 @@ export class CartComponent implements OnInit {
       this.billingInfo.deliveryType == 'pickup' ? 0 : 5.99; // Implement this function
     this.billingInfo.tax = +(
       (this.billingInfo.totalBookAmount + this.billingInfo.deliveryFee) *
-      0.13
+      this.taxRate
     ).toFixed(2); // Implement this function
     this.billingInfo.finalAmount = +(
       this.billingInfo.totalBookAmount +
@@ -156,7 +165,14 @@ export class CartComponent implements OnInit {
     });
   }
 
+  getReturnDateForCSharp(days: number): string {
+    const currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() + days);
+    return currentDate.toISOString();
+  }
+
   save() {
+    // Preparin data for issue books
     let issueBookData: IssueBook[] = [];
     this.cartItems.forEach((cartItem) => {
       const issueBook: IssueBook = {
@@ -168,6 +184,36 @@ export class CartComponent implements OnInit {
       issueBookData.push(issueBook);
     });
 
+    // Preparing data for generate bill
+    let billingBooksInfo: BillingBooksInfo[] = [];
+    this.cartItems.forEach((cur) => {
+      const bookInfo: BillingBooksInfo = {
+        bookId: cur.bookId,
+        rentDays: cur.rentPeriod,
+        estimatedReturnDate: this.getReturnDateForCSharp(+cur.rentPeriod),
+        bookOriginalPrice: cur.price,
+        bookRentPrice: cur.totalRentPrice,
+      };
+      billingBooksInfo.push(bookInfo);
+    });
+
+    let billingDetals: BillingDeatils = {
+      billingSummary: {
+        userId: this.curUserId,
+        bookQuantity: this.billingInfo.quantity,
+        delivery:
+          this.chekoutForm.controls['delivery'].value == 'home' ? true : false,
+        pickup:
+          this.chekoutForm.controls['delivery'].value == 'pickup'
+            ? true
+            : false,
+        tax: this.billingInfo.tax,
+        totalAmount: this.billingInfo.finalAmount,
+        addressId: this.user.addressId,
+      },
+      billingBooksInfo: billingBooksInfo,
+    };
+
     if (this.chekoutForm.valid) {
       this.spinnerVisible = true;
 
@@ -176,10 +222,35 @@ export class CartComponent implements OnInit {
           if (APIResult.isSuccess) {
             this.getBookData();
             this.bookSvc.showMessage(
-              'Book rented successful!',
+              'Book rented successfully!',
               'success',
               'TOPLevel'
             );
+
+            // Only execute the second API call if the first one is successful
+            this.bookSvc.GenerateBill(billingDetals).subscribe({
+              next: (billAPIResult) => {
+                if (billAPIResult.isSuccess) {
+                  // this.bookSvc.showMessage(
+                  //   'Bill Generated successfully!',
+                  //   'success',
+                  //   'TOPLevel'
+                  // );
+                } else {
+                  console.log(billAPIResult);
+                  this.bookSvc.showMessage(
+                    billAPIResult.errorMessage,
+                    'warning'
+                  );
+                }
+                this.spinnerVisible = false;
+              },
+              error: (billError) => {
+                console.log(billError);
+                this.bookSvc.showMessage(billError.errorMessage, 'warning');
+                this.spinnerVisible = false;
+              },
+            });
           } else {
             console.log(APIResult);
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');

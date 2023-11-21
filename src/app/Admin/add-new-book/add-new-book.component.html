@@ -38,7 +38,7 @@
             bookForm.controls['title'].touched
           "
         >
-          Please Enter Title
+          Please enter Title
         </div>
         <div
           class="text-danger"
@@ -47,7 +47,7 @@
             bookForm.controls['title'].touched
           "
         >
-          Please Enter at least 3 characters
+          Please enter at least 3 characters
         </div>
       </div>
       <div class="">
@@ -143,7 +143,12 @@
       </div>
     </div>
     <div class="col-md-4">
-      <label for="category" class="form-label">Category</label>
+      <label for="category" class="form-label"
+        >Category
+        <a class="fs-10" [routerLink]="['/Admin/Books/AddCategory']"
+          >Add New Category</a
+        ></label
+      >
       <select formControlName="category" class="form-select" id="category">
         <option value="">Select Category</option>
         <option
@@ -174,7 +179,7 @@
         Submit
       </button>
       <p *ngIf="!bookForm.valid" class="text-center">
-        Please Fill All Above fields to submit
+        Please fill all above fields to submit
       </p>
     </div>
   </form>

@@ -61,6 +61,7 @@
                           [(ngModel)]="book.rentPeriod"
                           (change)="onRentDaysChage()"
                         >
+                          <option value="1">1 days</option>
                           <option value="10">10 days</option>
                           <option value="20">20 days</option>
                           <option value="30">30 days</option>
@@ -93,7 +94,6 @@
           <form [formGroup]="chekoutForm" (ngSubmit)="save()">
             <div class="rounded p-3 border">
               <h2 class="mb-4">Billing Information</h2>
-
               <div class="billing-options mb-4">
                 <div class="form-check form-check-inline">
                   <input
@@ -162,30 +162,58 @@
 <!-- Delivery Information -->
 <div class="row mt-4">
   <div class="col-12">
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <div>
+        <h4>Rent Calculation:</h4>
+        <ul>
+          <li>
+            The rental fee is calculated based on the book's price plus a
+            percentage of the price determined by the rental period.
+          </li>
+          <li>
+            The formula is:
+            <strong>Book Price + (Rent Period / 100) * Book Price</strong>.
+          </li>
+          <li>
+            This ensures a fair and flexible pricing structure that takes into
+            account both the base cost of the book and the duration of the
+            rental.
+          </li>
+        </ul>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
     <div class="alert alert-info" role="alert">
-      <h4>Delivery Information:</h4>
-      <p>Standard Delivery:</p>
-      <ul>
-        <li>Estimated delivery time: 2-4 working business days.</li>
-      </ul>
-      <p>Please note:</p>
-      <ul>
-        <li>
-          Any orders placed after 10 pm on Friday and over the weekend will not
-          be dispatched until Monday.
-        </li>
-        <li>Excluding public holidays.</li>
-      </ul>
-      <p>PickUp Location:</p>
-      <ul>
-        <li>300 Regina Street North, Waterloo - N2J 4H2</li>
-        <li>Timings: 8 AM - 5 PM (Reception Desk)</li>
-        <li>
-          Vedant Patel &nbsp;|&nbsp;<i class="fas fa-envelope"></i>
-          vedantp9@gmail.com &nbsp;|&nbsp;<i class="fas fa-phone"></i> +1 647
-          627 4235
-        </li>
-      </ul>
+      <div>
+        <h4>Delivery Information:</h4>
+        <p>Standard Delivery:</p>
+        <ul>
+          <li>Estimated delivery time: 2-4 working business days.</li>
+        </ul>
+        <p>Please note:</p>
+        <ul>
+          <li>
+            Any orders placed after 10 pm on Friday and over the weekend will
+            not be dispatched until Monday.
+          </li>
+          <li>Excluding public holidays.</li>
+        </ul>
+        <p>PickUp Location:</p>
+        <ul>
+          <li>300 Regina Street North, Waterloo - N2J 4H2</li>
+          <li>Timings: 8 AM - 5 PM (Reception Desk)</li>
+          <li>
+            Vedant Patel &nbsp;|&nbsp;<i class="fas fa-envelope"></i>
+            vedantp9@gmail.com &nbsp;|&nbsp;<i class="fas fa-phone"></i> +1 647
+            627 4235
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
