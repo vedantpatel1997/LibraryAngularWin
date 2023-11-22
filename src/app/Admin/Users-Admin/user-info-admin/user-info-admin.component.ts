@@ -87,7 +87,6 @@ export class UserInfoAdminComponent {
           });
           this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
           this.spinnerVisible = false;
         }
       },

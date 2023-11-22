@@ -21,7 +21,9 @@ export class BillingInfoComponent {
     private bookSvc: BooksService,
     private router: Router
   ) {
-    this.curUserId = Number(this.loginSvc.getLoggedinUserId());
+    this.curUserId = this.curUserId = Number(
+      this.loginSvc.getUserData().userId
+    );
   }
 
   ngOnInit(): void {
@@ -30,8 +32,6 @@ export class BillingInfoComponent {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.billingDetails = APIResult.data;
-          console.log(this.billingDetails);
-          console.log(APIResult.data);
           this.spinnerVisible = false;
         }
       },

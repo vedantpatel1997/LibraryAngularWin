@@ -32,7 +32,7 @@ export class PasswordComponent implements OnInit {
     private loginSvc: LoginService,
     private bookSvc: BooksService
   ) {
-    this.curUserId = Number(this.loginSvc.getLoggedinUserId());
+    this.curUserId = Number(this.loginSvc.getUserData().userId);
   }
 
   passwordForm: FormGroup = new FormGroup(
@@ -84,7 +84,6 @@ export class PasswordComponent implements OnInit {
               `Password succesfully Updated.`,
               'success'
             );
-            console.log(APIResult);
             this.disableUpdate();
             this.spinnerVisible = false;
           } else {

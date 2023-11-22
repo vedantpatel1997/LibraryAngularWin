@@ -41,7 +41,6 @@ export class UsersAdminComponent {
     private loginSvc: LoginService
   ) {
     this.curLoggedinUser = loginSvc.getUserData();
-    console.log('UserAdmin', this.curLoggedinUser);
     if (this.curLoggedinUser.role == 'Owner') {
       this.displayedColumns.push('makeAdmin');
     }
@@ -57,7 +56,7 @@ export class UsersAdminComponent {
         if (APIResult.isSuccess) {
           this.users = APIResult.data;
           this.users = this.users.filter(
-            (user) => user.userId !== this.curLoggedinUser.userId
+            (user) => user.userId !== Number(this.loginSvc.getUserData().userId)
           );
           this.users.forEach((cur, i) => {
             cur.id = i + 1;
@@ -91,9 +90,6 @@ export class UsersAdminComponent {
   }
 
   showUserDetails(userId: number) {
-    // Here, you can navigate to a book details page or display a dialog with book details.
-    // You have access to the bookId to load the details of the selected book.
-    console.log('UserId: ', userId);
     this.router.navigateByUrl(`Admin/Users/Info/${userId}`);
   }
 

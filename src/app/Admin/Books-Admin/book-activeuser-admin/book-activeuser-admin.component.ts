@@ -25,7 +25,6 @@ export class BookActiveuserAdminComponent {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.usersHistory = APIResult.data;
-          console.log(this.usersHistory);
           this.spinnerVisible = false;
         } else {
           this.spinnerVisible = false;

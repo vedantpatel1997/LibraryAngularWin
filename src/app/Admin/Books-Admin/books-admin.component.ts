@@ -72,9 +72,6 @@ export class BooksAdminComponent {
   }
 
   showBookDetails(bookId: number) {
-    // Here, you can navigate to a book details page or display a dialog with book details.
-    // You have access to the bookId to load the details of the selected book.
-    console.log('BookId: ', bookId);
     this.router.navigateByUrl(`Admin/Books/Info/${bookId}`);
   }
 }

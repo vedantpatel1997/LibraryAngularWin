@@ -20,7 +20,7 @@ import { LoginService } from 'src/app/Services/login.service';
 export class CartComponent implements OnInit {
   error: boolean = false;
   cartItems: Book[] = [];
-  curUserId: any;
+  curUserId: number;
   user: User;
   spinnerVisible: boolean = false;
   private taxRate: number = 0.13;
@@ -36,7 +36,7 @@ export class CartComponent implements OnInit {
   };
 
   constructor(private bookSvc: BooksService, private loginSvc: LoginService) {
-    this.curUserId = Number(loginSvc.getLoggedinUserId());
+    this.curUserId = Number(this.loginSvc.getUserData().userId);
     this.user = loginSvc.getUserData();
   }
   ngOnInit(): void {
@@ -65,7 +65,6 @@ export class CartComponent implements OnInit {
           } else {
             this.error = true;
             // Handle other possible error scenarios here
-            console.error('API Error:', APIResult.errorMessage);
             this.spinnerVisible = false;
           }
         },
@@ -133,15 +132,8 @@ export class CartComponent implements OnInit {
   }
 
   removeFromCart(bookId: number) {
-    if (!this.loginSvc.isLoggedin()) {
-      this.bookSvc.showMessage('Please Login to remove a book.', 'danger');
-      return;
-    }
-
-    let userId = Number(this.loginSvc.getLoggedinUserId());
-
     this.spinnerVisible = true;
-    this.bookSvc.removeFromCart(userId, bookId).subscribe({
+    this.bookSvc.removeFromCart(this.curUserId, bookId).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.bookSvc.showMessage(
@@ -227,42 +219,14 @@ export class CartComponent implements OnInit {
               'success',
               'TOPLevel'
             );
-
-            // // Only execute the second API call if the first one is successful
-            // this.bookSvc.GenerateBill(billingDetals).subscribe({
-            //   next: (billAPIResult) => {
-            //     if (billAPIResult.isSuccess) {
-            //       // this.bookSvc.showMessage(
-            //       //   'Bill Generated successfully!',
-            //       //   'success',
-            //       //   'TOPLevel'
-            //       // );
-            //     } else {
-            //       console.log(billAPIResult);
-            //       this.bookSvc.showMessage(
-            //         billAPIResult.errorMessage,
-            //         'warning'
-            //       );
-            //     }
-            //     this.spinnerVisible = false;
-            //   },
-            //   error: (billError) => {
-            //     console.log(billError);
-            //     this.bookSvc.showMessage(billError.errorMessage, 'warning');
-            //     this.spinnerVisible = false;
-            //   },
-            // });
           } else {
-            console.log(APIResult);
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
             this.spinnerVisible = false;
           }
         },
         error: (error) => {
           this.spinnerVisible = false;
-          // Handle the error here
           if (error.status == 401) {
-            // Handle unauthorized error if needed
           }
           this.error = true;
         },

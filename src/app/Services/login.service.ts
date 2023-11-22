@@ -12,36 +12,44 @@ import { User } from '../DTO/User';
   providedIn: 'root',
 })
 export class LoginService {
-  private curUser: Number | undefined;
   private curUserdata: User | undefined;
+  private token: string | undefined;
+  private refreshToken: string | undefined;
   private bookApiUrl = environment.apiAddress + 'Authorize/';
 
-  constructor(private http: HttpClient, private route: Router) {
-    const userData = localStorage.getItem('userData');
-    if (userData) {
-      // Assuming 'User' is the correct type for your user data
-      this.curUserdata = JSON.parse(userData) as User;
-    } else {
-      this.curUserdata = null; // or handle the absence of user data appropriately
-    }
-  }
+  // Behaviour subject to pass data in the app component.ts or any other component directly
   private loggedInSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
-
+  // call this behavoiur and every subscribers of this will notice a change
   get isLoggedIn(): Observable<boolean> {
     return this.loggedInSubject.asObservable();
   }
 
-  login() {
-    // Perform your login logic here
-    // Set user as logged in
-    this.loggedInSubject.next(true);
-  }
+  constructor(private http: HttpClient, private route: Router) {}
 
-  logout() {
-    // Perform your logout logic here
-    // Set user as logged out
-    this.loggedInSubject.next(false);
+  setData(APIResponse: APIResponse) {
+    this.curUserdata = APIResponse.data.userData;
+    this.token = APIResponse.data.token;
+    this.refreshToken = APIResponse.data.refreshToken;
+
+    // Storing tokens in the localstorage
+    localStorage.setItem('token', APIResponse.data.token);
+    localStorage.setItem('refreshToken', APIResponse.data.refreshToken);
+    localStorage.setItem(
+      'curUserData',
+      JSON.stringify(APIResponse.data.userData)
+    );
+  }
+  getUserData() {
+    return (
+      this.curUserdata || (JSON.parse(localStorage.getItem('userData')) as User)
+    );
+  }
+  getTokenValue() {
+    return this.token || localStorage.getItem('token') || '';
+  }
+  getRefreshTokenValue() {
+    return this.refreshToken || localStorage.getItem('refreshToken') || '';
   }
   generateToken(usercred: userCred): Observable<APIResponse> {
     // Prepare the request body with the user credentials
@@ -56,7 +64,6 @@ export class LoginService {
       requestBody
     );
   }
-
   generateRefreshToken(): Observable<APIResponse> {
     const requestBody = {
       token: this.getTokenValue(),
@@ -67,42 +74,33 @@ export class LoginService {
       requestBody
     );
   }
+  login() {
+    this.loggedInSubject.next(true);
+  }
+  logout() {
+    this.curUserdata = undefined;
+    this.token = undefined;
+    this.refreshToken = undefined;
+    this.loggedInSubject.next(false);
+    this.route.navigateByUrl('');
 
-  isLoggedin() {
-    if (
-      (this.haveAccess('User') ||
-        this.haveAccess('Admin') ||
-        this.haveAccess('Owner')) &&
-      this.getLoggedinUserId()
-    ) {
-      return true;
-    }
-    return false;
+    // Removing tokens from localstorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userData');
   }
-  getLoggedinUserId() {
-    if (this.curUser !== null) return this.curUser;
-    return false;
-  }
-
-  getTokenValue() {
-    return localStorage.getItem('token') || '';
-  }
-  getRefreshTokenValue() {
-    return localStorage.getItem('refreshToken') || '';
-  }
-
   haveAccess(role: string) {
     try {
       // Attempt to retrieve the token from local storage
-      const loggedInToken = localStorage.getItem('token') || '';
+      // const loggedInToken = localStorage.getItem('token') || '';
 
-      if (loggedInToken === '') {
+      if (this.token === '') {
         // If the token is empty or not found, return false (no access)
         return false;
       }
 
       // Attempt to split the token and decode the middle part (payload)
-      const tokenParts = loggedInToken.split('.');
+      const tokenParts = this.token.split('.');
       if (tokenParts.length !== 3) {
         // If the token doesn't have the expected three parts, it's invalid
         return false;
@@ -113,39 +111,22 @@ export class LoginService {
       const finalData = JSON.parse(atobData);
 
       // Check if the role in the token matches the specified role
-      if (finalData && finalData.role && finalData.role.trim() === role) {
-        this.curUser = finalData.UserId;
+      if (
+        finalData &&
+        finalData.role &&
+        finalData.role.trim() === role &&
+        finalData.UserId == this.curUserdata.userId
+      ) {
         return true; // Role matches, access granted
       }
     } catch (error) {
       // Handle any potential errors, such as invalid token format or JSON parsing errors
       console.error('Error while checking access:');
-      this.logOut();
       this.logout();
       return false;
     }
 
     // If any error occurred or access was not granted, return false
     return false;
-  }
-
-  saveTokens(tokenData: APIToken) {
-    localStorage.setItem('token', tokenData.token);
-    localStorage.setItem('refreshToken', tokenData.refreshToken);
-  }
-  saveUserData(userData: User) {
-    this.curUserdata = userData;
-    localStorage.setItem('userData', JSON.stringify(userData));
-  }
-
-  getUserData() {
-    return this.curUserdata;
-  }
-
-  logOut() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userData');
-    this.route.navigateByUrl('');
   }
 }

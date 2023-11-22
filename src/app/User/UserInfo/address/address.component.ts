@@ -31,7 +31,7 @@ export class AddressComponent implements OnInit {
     private loginSvc: LoginService,
     private bookSvc: BooksService
   ) {
-    this.curUserId = Number(this.loginSvc.getLoggedinUserId());
+    this.curUserId = Number(this.loginSvc.getUserData().userId);
   }
   ngOnInit() {
     this.Start();

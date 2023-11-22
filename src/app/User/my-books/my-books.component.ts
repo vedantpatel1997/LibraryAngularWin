@@ -14,7 +14,7 @@ export class MyBooksComponent implements OnInit {
   spinnerVisible: boolean = false;
 
   constructor(private bookSvc: BooksService, private loginSvc: LoginService) {
-    this.curUserId = Number(this.loginSvc.getLoggedinUserId());
+    this.curUserId = Number(this.loginSvc.getUserData().userId);
   }
 
   ngOnInit(): void {
@@ -27,10 +27,8 @@ export class MyBooksComponent implements OnInit {
       (APIResult) => {
         if (APIResult.isSuccess) {
           this.myBooks = APIResult.data;
-          console.log(APIResult.data);
           this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
           this.spinnerVisible = false;
         }
       },
@@ -86,11 +84,9 @@ export class MyBooksComponent implements OnInit {
     this.bookSvc.submitBook(submitData).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
-          console.log(APIResult);
           this.getBooksforCurUser();
           this.bookSvc.showMessage('Successfully submited Book !', 'success');
         } else {
-          console.log(APIResult);
           this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
           this.spinnerVisible = false;
         }

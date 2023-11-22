@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ErrorComponent } from '../error.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CartComponent } from './cart/cart.component';
-import { AuthGuard } from '../login/auth.guard';
+import { AuthGuard } from '../Shared/auth.guard';
 import { MyBooksComponent } from './my-books/my-books.component';
 
 const routes: Routes = [
@@ -23,7 +23,6 @@ const routes: Routes = [
   {
     path: 'User',
     canActivate: [AuthGuard],
-
     loadChildren: () =>
       import('./UserInfo/user-info.module').then((m) => m.UserInfoModule),
   },

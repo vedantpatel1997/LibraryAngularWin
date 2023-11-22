@@ -21,7 +21,6 @@ export class BookDeleteAdminComponent {
     this.router.params.subscribe((p) => {
       this.id = p['id'];
     });
-    console.log('BookInfo ID: ', this.id);
   }
 
   DeleteBook() {

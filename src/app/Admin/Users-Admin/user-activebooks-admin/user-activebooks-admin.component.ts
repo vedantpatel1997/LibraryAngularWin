@@ -29,10 +29,8 @@ export class UserActivebooksAdminComponent {
       (APIResult) => {
         if (APIResult.isSuccess) {
           this.myBooks = APIResult.data;
-          console.log(APIResult.data);
           this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
           this.spinnerVisible = false;
         }
       },
@@ -88,11 +86,9 @@ export class UserActivebooksAdminComponent {
     this.bookSvc.submitBook(submitData).subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
-          console.log(APIResult);
           this.getBooksforCurUser();
           this.bookSvc.showMessage('Successfully submited Book !', 'success');
         } else {
-          console.log(APIResult);
           this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
           this.spinnerVisible = false;
         }

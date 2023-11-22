@@ -20,7 +20,6 @@ export class UserMailAdminComponent {
     this.route.params.subscribe((p) => {
       this.id = p['id'];
     });
-    console.log('UserMailAdminComponent ID: ', this.id);
   }
   sendResetPasswordLink() {
     this.spinnerVisible = true;

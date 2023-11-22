@@ -7,46 +7,40 @@ import {
 import { Injectable, Injector } from '@angular/core';
 import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { LoginService } from '../Services/login.service';
+import { APIResponse } from '../DTO/APIResponse';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenInterceptorService implements HttpInterceptor {
-  constructor(private inject: Injector) {}
+  constructor(private loginSvc: LoginService) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let loginService = this.inject.get(LoginService);
-    // let jwtToken = req.clone({
-    //   setHeaders: {
-    //     Authorization: 'bearer ' + loginService.getTokenValue(),
-    //   },
-    // });
     let authRequest = req;
-    authRequest = this.AddTokenHandler(req, loginService.getTokenValue());
+    authRequest = this.AddTokenHandler(req, this.loginSvc.getTokenValue());
     return next.handle(authRequest).pipe(
       catchError((errorData) => {
         if (errorData.status === 401) {
-          // console.log(errorData);
-          // loginService.logOut();
-
           return this.handleRefreshToken(req, next);
         }
         return throwError(errorData);
       })
     );
   }
+
   handleRefreshToken(request: HttpRequest<any>, next: HttpHandler) {
-    let loginService = this.inject.get(LoginService);
-    return loginService.generateRefreshToken().pipe(
-      switchMap((data: any) => {
-        loginService.saveTokens(data.data);
-        return next.handle(this.AddTokenHandler(request, data.data.token));
+    return this.loginSvc.generateRefreshToken().pipe(
+      switchMap((APIResponse: APIResponse) => {
+        this.loginSvc.setData(APIResponse);
+        return next.handle(
+          this.AddTokenHandler(request, APIResponse.data.token)
+        );
       }),
       catchError((errorData) => {
-        loginService.logOut();
+        console.log('Refreshtoken Generation error');
         return throwError(errorData);
       })
     );

@@ -22,7 +22,6 @@ export class DashboardComponent implements OnInit {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.categories = APIResult.data;
-          console.log(APIResult);
         }
       },
       error: (error) => {

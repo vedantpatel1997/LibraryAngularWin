@@ -21,7 +21,6 @@ export class UserDeleteAdminComponent {
     this.router.params.subscribe((p) => {
       this.id = p['id'];
     });
-    console.log('UserDeleteAdminComponent ID: ', this.id);
   }
 
   DeleteUser() {

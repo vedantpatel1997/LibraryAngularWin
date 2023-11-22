@@ -80,55 +80,82 @@ export class LoginComponent implements OnInit {
     };
 
     this.spinnerVisible = true;
-    this.loginSvc
-      .generateToken(loginData)
-      .pipe(
-        switchMap((APIResult) => {
-          if (APIResult.isSuccess) {
-            this.loginSvc.saveTokens(APIResult.data);
-            if (
-              this.loginSvc.haveAccess('Admin') ||
-              this.loginSvc.haveAccess('Owner')
-            ) {
-              this.route.navigate(['/Admin/Dashboard']);
-            } else if (this.loginSvc.haveAccess('User')) {
-              this.route.navigate(['']);
-            }
-
-            // Check user role and make the second API call if needed
-
-            let curuserId = this.loginSvc.getLoggedinUserId();
-            if (curuserId !== undefined && !isNaN(curuserId as number)) {
-              // Return the result of the second API call (makeAnotherAPICall)
-              return this.userService.getUserByUserId(curuserId as number);
-            }
-
-            // Return an empty observable if no second API call is needed
-            return of(undefined);
-          } else {
-            this.bookSvc.showMessage('Invalid Credentails');
-            return of(undefined);
+    this.loginSvc.generateToken(loginData).subscribe({
+      next: (APIResult) => {
+        if (APIResult.isSuccess) {
+          this.loginSvc.setData(APIResult);
+          this.loginSvc.login();
+          if (
+            this.loginSvc.haveAccess('Admin') ||
+            this.loginSvc.haveAccess('Owner')
+          ) {
+            this.route.navigate(['/Admin/Dashboard']);
+          } else if (this.loginSvc.haveAccess('User')) {
+            this.route.navigate(['']);
           }
-        })
-      )
-      .subscribe(
-        (APIResult) => {
-          if (APIResult?.isSuccess) {
-            // Handle the result of the additional API call
-            this.loginSvc.saveUserData(APIResult.data);
-            this.loginSvc.login();
-          }
-
-          this.spinnerVisible = false;
-        },
-        (error) => {
-          this.spinnerVisible = false;
-          // Handle errors
-          this.bookSvc.showMessage(
-            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
-            'danger'
-          );
+        } else {
+          this.bookSvc.showMessage('Invalid Credentails', 'danger');
         }
-      );
+        this.spinnerVisible = false;
+      },
+      error: (error) => {
+        // Handle the error here
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
+        this.spinnerVisible = false;
+        console.log(error);
+      },
+    });
+
+    // .pipe(
+    //   switchMap((APIResult) => {
+    //     if (APIResult.isSuccess) {
+    //       this.loginSvc.saveTokens(APIResult.data);
+
+    //       // Check user role and make the second API call if needed
+
+    //       let curuserId = this.loginSvc.getLoggedinUserId();
+    //       if (curuserId !== undefined && !isNaN(curuserId as number)) {
+    //         // Return the result of the second API call (makeAnotherAPICall)
+    //         return this.userService.getUserByUserId(curuserId as number);
+    //       }
+
+    //       // Return an empty observable if no second API call is needed
+    //       return of(undefined);
+    //     } else {
+    //       this.bookSvc.showMessage('Invalid Credentails');
+    //       return of(undefined);
+    //     }
+    //   })
+    // )
+    // .subscribe(
+    //   (APIResult) => {
+    //     if (APIResult?.isSuccess) {
+    //       // Handle the result of the additional API call
+    //       this.loginSvc.saveUserData(APIResult.data);
+    //       this.loginSvc.login();
+    //       if (
+    //         this.loginSvc.haveAccess('Admin') ||
+    //         this.loginSvc.haveAccess('Owner')
+    //       ) {
+    //         this.route.navigate(['/Admin/Dashboard']);
+    //       } else if (this.loginSvc.haveAccess('User')) {
+    //         this.route.navigate(['']);
+    //       }
+    //     }
+
+    //     this.spinnerVisible = false;
+    //   },
+    //   (error) => {
+    //     this.spinnerVisible = false;
+    //     // Handle errors
+    //     this.bookSvc.showMessage(
+    //       `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+    //       'danger'
+    //     );
+    //   }
+    // );
   }
 }

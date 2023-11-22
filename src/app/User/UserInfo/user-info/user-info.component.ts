@@ -32,7 +32,7 @@ export class UserInfoComponent {
     private loginSvc: LoginService,
     private bookSvc: BooksService
   ) {
-    this.curUserId = Number(this.loginSvc.getLoggedinUserId());
+    this.curUserId = Number(this.loginSvc.getUserData().userId);
   }
 
   ngAfterViewInit(): void {
@@ -86,7 +86,6 @@ export class UserInfoComponent {
           });
           this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
           this.spinnerVisible = false;
         }
       },

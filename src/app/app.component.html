@@ -6,7 +6,7 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            *ngIf="userInfo.isUser"
+            *ngIf="!userInfo.isAdmin && !userInfo.isOwner"
             [routerLink]="['Home']"
             routerLinkActive="active"
             >Home</a
@@ -15,7 +15,7 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            *ngIf="userInfo.isUser"
+            *ngIf="!userInfo.isAdmin && !userInfo.isOwner"
             [routerLink]="['Books']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"

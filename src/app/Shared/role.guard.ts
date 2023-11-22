@@ -8,10 +8,7 @@ import { User } from '../DTO/User';
   providedIn: 'root',
 })
 export class roleGuard {
-  curLoggedinUser: User;
-  constructor(private router: Router, private loginSvc: LoginService) {
-    this.curLoggedinUser = loginSvc.getUserData();
-  }
+  constructor(private router: Router, private loginSvc: LoginService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot
@@ -20,27 +17,18 @@ export class roleGuard {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    // Get the required role from route data
+    let loggedInUser = this.loginSvc.getUserData();
 
-    // Check if the user is logged in
-    if (this.loginSvc.isLoggedin()) {
-      if (this.curLoggedinUser?.role == 'Owner') {
-        return true;
-      }
-
-      const requiredRole = route.data['role'];
-      // Check if the user has the required role
-      if (this.loginSvc.haveAccess(requiredRole)) {
-        return true; // User is authenticated and has access, allow access
-      } else {
-        alert('Access denied. User does not have the required role.');
-        this.router.navigate(['/Books']);
-        return false;
-      }
-    } else {
-      // User is not logged in, redirect to the login page
+    if (loggedInUser == null || loggedInUser == undefined) {
       alert('Please login to continue');
       this.router.navigate(['/login']);
+      return false;
+    }
+
+    if (loggedInUser.role == 'Admin' || loggedInUser.role == 'Owner') {
+      return true;
+    } else {
+      alert('You dont have permission to access this page.');
       return false;
     }
   }

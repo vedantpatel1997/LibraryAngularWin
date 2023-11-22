@@ -40,7 +40,6 @@ export class BookInfoAdminComponent {
         if (APIResult.isSuccess) {
           this.categoryData = APIResult.data;
         } else {
-          console.log(APIResult);
         }
       },
       (error) => {
@@ -82,7 +81,6 @@ export class BookInfoAdminComponent {
           });
           this.spinnerVisible = false;
         } else {
-          console.log(APIResult);
           this.spinnerVisible = false;
         }
       },

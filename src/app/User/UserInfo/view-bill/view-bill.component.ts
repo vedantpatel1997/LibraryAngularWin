@@ -44,28 +44,4 @@ export class ViewBillComponent {
       },
     });
   }
-
-  sendEmail(userId: number) {
-    //   let billHtml = this.bookSvc.SendBill(userId).subscribe({
-    //     next: (APIResult) => {
-    //       if (APIResult.isSuccess) {
-    //         this.spinnerVisible = false;
-    //         this.billingDetails = APIResult.data;
-    //         this.billingDetails.billingBooksInfos.forEach(
-    //           (cur) => (this.totalRentedBooksPrice += cur.bookRentPrice)
-    //         );
-    //         console.log(this.billingDetails);
-    //       }
-    //     },
-    //     error: (error) => {
-    //       // Handle the error here
-    //       console.log(error);
-    //       this.spinnerVisible = false;
-    //       this.bookSvc.showMessage(
-    //         `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
-    //         'danger'
-    //       );
-    //     },
-    //   });
-  }
 }

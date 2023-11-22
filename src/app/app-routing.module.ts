@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { AuthGuard } from './login/auth.guard';
+import { AuthGuard } from './Shared/auth.guard';
 import { roleGuard } from './Shared/role.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CommonModule } from '@angular/common';
@@ -18,13 +18,10 @@ const routes: Routes = [
   },
   {
     path: 'Books',
-    // canActivate: [AuthGuard],
-
     loadChildren: () => import('./User/User.module').then((m) => m.UserModule),
   },
   {
     path: 'Admin',
-    // canActivate: [AuthGuard],
     canActivate: [roleGuard],
     data: { preload: false, role: 'Admin' },
     loadChildren: () =>

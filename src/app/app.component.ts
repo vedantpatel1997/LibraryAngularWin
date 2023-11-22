@@ -1,7 +1,6 @@
 import { AfterContentInit, Component, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './Services/login.service';
-import { RouteChangeService } from './Shared/route-change.service';
 import { User } from './DTO/User';
 
 @Component({
@@ -20,31 +19,26 @@ export class AppComponent implements OnInit {
   };
   title = 'LibraryManagement.web';
 
-  constructor(
-    private route: Router,
-    private loginSvc: LoginService,
-    private routeChangeService: RouteChangeService
-  ) {}
+  constructor(private route: Router, private loginSvc: LoginService) {}
 
   ngOnInit(): void {
-    // this.routeChangeService.getRouteChangeObservable().subscribe(() => {
-    //   // Perform actions based on the current route.
-    //   this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
-    //   this.userInfo.isUser = this.loginSvc.haveAccess('User');
-    //   this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
-    //   console.log('Behaviur changed');
-    // });
     this.loginSvc.isLoggedIn.subscribe((loggedIn) => {
-      this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
-      this.userInfo.isUser = this.loginSvc.haveAccess('User');
-      this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
-      this.userInfo.isOwner = this.loginSvc.haveAccess('Owner');
       this.curUser = this.loginSvc.getUserData();
+      if (loggedIn) {
+        this.userInfo.isLoggedin = loggedIn;
+        this.userInfo.isUser = this.curUser.role == 'User';
+        this.userInfo.isAdmin = this.curUser.role == 'Admin';
+        this.userInfo.isOwner = this.curUser.role == 'Owner';
+      } else {
+        this.userInfo.isLoggedin = loggedIn;
+        this.userInfo.isUser = false;
+        this.userInfo.isAdmin = false;
+        this.userInfo.isOwner = false;
+      }
     });
   }
 
   logOut() {
-    this.loginSvc.logOut();
     this.loginSvc.logout();
   }
 }

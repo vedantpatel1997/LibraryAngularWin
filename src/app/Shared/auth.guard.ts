@@ -14,19 +14,22 @@ export class AuthGuard {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    // Your authentication logic here
-    const allowAccess: boolean = true;
+    let loggedInUser = this.loginSvc.getUserData();
 
-    if (this.loginSvc.isLoggedin()) {
-      return true; // User is authenticated, allow access
-      console.log(true);
-    } else {
-      console.log(false);
-      this.loginSvc.logOut();
-      this.loginSvc.logout();
-      alert('Please Login !');
+    if (loggedInUser == null || loggedInUser == undefined) {
+      alert('Please login to continue');
       this.router.navigate(['/login']);
-      return false; // Redirect to the login page
+      return false;
+    }
+    if (
+      loggedInUser.role == 'User' ||
+      loggedInUser.role == 'Owner' ||
+      loggedInUser.role == 'Admin'
+    ) {
+      return true;
+    } else {
+      alert('You dont have permission to access this page.');
+      return false;
     }
   }
 }

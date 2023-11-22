@@ -6,16 +6,17 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LoginService } from '../Services/login.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private loginSvc: LoginService) {}
 
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const localToken = localStorage.getItem('token');
+    const localToken = this.loginSvc.getTokenValue();
     request.clone({
       headers: request.headers.set('Authorization', 'bearer' + localToken),
     });
