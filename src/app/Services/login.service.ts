@@ -15,6 +15,7 @@ export class LoginService {
   private curUser: Number | undefined;
   private curUserdata: User | undefined;
   private bookApiUrl = environment.apiAddress + 'Authorize/';
+
   constructor(private http: HttpClient, private route: Router) {
     const userData = localStorage.getItem('userData');
     if (userData) {

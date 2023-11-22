@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { Observable } from 'rxjs';
+import { User } from '../DTO/User';
 
 @Injectable({
   providedIn: 'root',
 })
 export class roleGuard {
-  constructor(private router: Router, private loginSvc: LoginService) {}
+  curLoggedinUser: User;
+  constructor(private router: Router, private loginSvc: LoginService) {
+    this.curLoggedinUser = loginSvc.getUserData();
+  }
 
   canActivate(
     route: ActivatedRouteSnapshot
@@ -20,6 +24,10 @@ export class roleGuard {
 
     // Check if the user is logged in
     if (this.loginSvc.isLoggedin()) {
+      if (this.curLoggedinUser?.role == 'Owner') {
+        return true;
+      }
+
       const requiredRole = route.data['role'];
       // Check if the user has the required role
       if (this.loginSvc.haveAccess(requiredRole)) {

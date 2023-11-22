@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     isUser: false,
     isAdmin: false,
     isLoggedin: false,
+    isOwner: false,
   };
   title = 'LibraryManagement.web';
 
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
       this.userInfo.isLoggedin = this.loginSvc.isLoggedin();
       this.userInfo.isUser = this.loginSvc.haveAccess('User');
       this.userInfo.isAdmin = this.loginSvc.haveAccess('Admin');
+      this.userInfo.isOwner = this.loginSvc.haveAccess('Owner');
       this.curUser = this.loginSvc.getUserData();
     });
   }

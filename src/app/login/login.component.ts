@@ -86,7 +86,10 @@ export class LoginComponent implements OnInit {
         switchMap((APIResult) => {
           if (APIResult.isSuccess) {
             this.loginSvc.saveTokens(APIResult.data);
-            if (this.loginSvc.haveAccess('Admin')) {
+            if (
+              this.loginSvc.haveAccess('Admin') ||
+              this.loginSvc.haveAccess('Owner')
+            ) {
               this.route.navigate(['/Admin/Dashboard']);
             } else if (this.loginSvc.haveAccess('User')) {
               this.route.navigate(['']);

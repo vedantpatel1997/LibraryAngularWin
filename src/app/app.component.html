@@ -6,7 +6,7 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            *ngIf="!userInfo.isAdmin"
+            *ngIf="userInfo.isUser"
             [routerLink]="['Home']"
             routerLinkActive="active"
             >Home</a
@@ -15,7 +15,7 @@
         <li class="nav-item">
           <a
             class="nav-link"
-            *ngIf="!userInfo.isAdmin"
+            *ngIf="userInfo.isUser"
             [routerLink]="['Books']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
@@ -32,7 +32,7 @@
           >
         </li>
 
-        <li class="nav-item" *ngIf="userInfo.isAdmin">
+        <li class="nav-item" *ngIf="userInfo.isAdmin || userInfo.isOwner">
           <a
             class="nav-link"
             [routerLink]="['Admin', 'Dashboard']"
@@ -40,7 +40,7 @@
             >Dashboard</a
           >
         </li>
-        <li class="nav-item" *ngIf="userInfo.isAdmin">
+        <li class="nav-item" *ngIf="userInfo.isAdmin || userInfo.isOwner">
           <a
             routerLinkActive="active"
             class="nav-link"
@@ -48,7 +48,7 @@
             >Users</a
           >
         </li>
-        <li class="nav-item" *ngIf="userInfo.isAdmin">
+        <li class="nav-item" *ngIf="userInfo.isAdmin || userInfo.isOwner">
           <a
             routerLinkActive="active"
             class="nav-link"
@@ -56,7 +56,7 @@
             >Books</a
           >
         </li>
-        <li class="nav-item" *ngIf="userInfo.isAdmin">
+        <li class="nav-item" *ngIf="userInfo.isAdmin || userInfo.isOwner">
           <a
             routerLinkActive="active"
             class="nav-link"
@@ -69,6 +69,9 @@
       <ul class="navbar-nav ms-auto">
         <li *ngIf="userInfo.isAdmin">
           <span class="nav-link">Welcome Admin</span>
+        </li>
+        <li *ngIf="userInfo.isOwner">
+          <span class="nav-link">Welcome Owner</span>
         </li>
         <li class="nav-item dropdown-center" *ngIf="userInfo.isLoggedin">
           <a

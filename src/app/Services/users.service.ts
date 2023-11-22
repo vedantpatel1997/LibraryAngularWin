@@ -78,4 +78,15 @@ export class UsersService {
       `${this.userApiUrl}Delete?id=${userId}`
     );
   }
+
+  MakeAdmin(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.userApiUrl}MakeAdmin?userId=${userId}`
+    );
+  }
+  MakeUser(userId: number): Observable<APIResponse> {
+    return this.http.get<APIResponse>(
+      `${this.userApiUrl}MakeUser?userId=${userId}`
+    );
+  }
 }

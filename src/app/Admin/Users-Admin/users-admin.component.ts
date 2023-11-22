@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { User } from 'src/app/DTO/User';
 import { BooksService } from 'src/app/Services/books.service';
+import { LoginService } from 'src/app/Services/login.service';
 import { UsersService } from 'src/app/Services/users.service';
 @Component({
   selector: 'app-users-admin',
@@ -12,6 +13,7 @@ import { UsersService } from 'src/app/Services/users.service';
   styleUrls: ['./users-admin.component.css'],
 })
 export class UsersAdminComponent {
+  curLoggedinUser: User;
   users: User[] = [];
   spinnerVisible: boolean = false;
 
@@ -35,14 +37,28 @@ export class UsersAdminComponent {
   constructor(
     private userSvc: UsersService,
     private router: Router,
-    private bookSvc: BooksService
+    private bookSvc: BooksService,
+    private loginSvc: LoginService
   ) {
+    this.curLoggedinUser = loginSvc.getUserData();
+    console.log('UserAdmin', this.curLoggedinUser);
+    if (this.curLoggedinUser.role == 'Owner') {
+      this.displayedColumns.push('makeAdmin');
+    }
+
     // Assign the data to the data source for the table to render
+    this.GetUserData();
+  }
+
+  GetUserData() {
     this.spinnerVisible = true;
     this.userSvc.GetAllUsers().subscribe({
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.users = APIResult.data;
+          this.users = this.users.filter(
+            (user) => user.userId !== this.curLoggedinUser.userId
+          );
           this.users.forEach((cur, i) => {
             cur.id = i + 1;
           });
@@ -55,7 +71,7 @@ export class UsersAdminComponent {
       },
       error: (error) => {
         // Handle the error here
-        bookSvc.showMessage(
+        this.bookSvc.showMessage(
           `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
           'danger'
         );
@@ -79,5 +95,46 @@ export class UsersAdminComponent {
     // You have access to the bookId to load the details of the selected book.
     console.log('UserId: ', userId);
     this.router.navigateByUrl(`Admin/Users/Info/${userId}`);
+  }
+
+  makeAdmin(userId: number) {
+    this.spinnerVisible = true;
+    this.userSvc.MakeAdmin(userId).subscribe({
+      next: (APIResult) => {
+        if (APIResult.isSuccess) {
+          this.GetUserData();
+          this.bookSvc.showMessage(APIResult.errorMessage, 'success');
+        }
+      },
+      error: (error) => {
+        // Handle the error here
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
+        this.spinnerVisible = false;
+        console.log(error);
+      },
+    });
+  }
+  makeUser(userId: number) {
+    this.spinnerVisible = true;
+    this.userSvc.MakeUser(userId).subscribe({
+      next: (APIResult) => {
+        if (APIResult.isSuccess) {
+          this.GetUserData();
+          this.bookSvc.showMessage(APIResult.errorMessage, 'success');
+        }
+      },
+      error: (error) => {
+        // Handle the error here
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
+        this.spinnerVisible = false;
+        console.log(error);
+      },
+    });
   }
 }
