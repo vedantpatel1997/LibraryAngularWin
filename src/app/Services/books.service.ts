@@ -38,10 +38,10 @@ export class BooksService {
       body
     );
   }
-  issueBooks(issueBooksData: IssueBook[]): Observable<APIResponse> {
+  issueBooks(billingDeatils: BillingDeatils): Observable<APIResponse> {
     return this.http.post<APIResponse>(
       `${this.bookUserTransactionApiUrl}IssueBooks`,
-      issueBooksData
+      billingDeatils
     );
   }
   submitBook(SubmitBooksData: {
@@ -146,7 +146,6 @@ export class BooksService {
       billingDetails
     );
   }
-
   GetAllBillsByUserId(userId: number): Observable<APIResponse> {
     return this.http.get<APIResponse>(
       `${this.bookUserTransactionApiUrl}GetBillsByUserID?userId=${userId}`

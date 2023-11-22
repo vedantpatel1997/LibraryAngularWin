@@ -212,12 +212,13 @@ export class CartComponent implements OnInit {
         addressId: this.user.addressId,
       },
       billingBooksInfo: billingBooksInfo,
+      issueDTos: issueBookData,
     };
 
     if (this.chekoutForm.valid) {
       this.spinnerVisible = true;
 
-      this.bookSvc.issueBooks(issueBookData).subscribe({
+      this.bookSvc.issueBooks(billingDetals).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
             this.getBookData();
@@ -227,30 +228,30 @@ export class CartComponent implements OnInit {
               'TOPLevel'
             );
 
-            // Only execute the second API call if the first one is successful
-            this.bookSvc.GenerateBill(billingDetals).subscribe({
-              next: (billAPIResult) => {
-                if (billAPIResult.isSuccess) {
-                  // this.bookSvc.showMessage(
-                  //   'Bill Generated successfully!',
-                  //   'success',
-                  //   'TOPLevel'
-                  // );
-                } else {
-                  console.log(billAPIResult);
-                  this.bookSvc.showMessage(
-                    billAPIResult.errorMessage,
-                    'warning'
-                  );
-                }
-                this.spinnerVisible = false;
-              },
-              error: (billError) => {
-                console.log(billError);
-                this.bookSvc.showMessage(billError.errorMessage, 'warning');
-                this.spinnerVisible = false;
-              },
-            });
+            // // Only execute the second API call if the first one is successful
+            // this.bookSvc.GenerateBill(billingDetals).subscribe({
+            //   next: (billAPIResult) => {
+            //     if (billAPIResult.isSuccess) {
+            //       // this.bookSvc.showMessage(
+            //       //   'Bill Generated successfully!',
+            //       //   'success',
+            //       //   'TOPLevel'
+            //       // );
+            //     } else {
+            //       console.log(billAPIResult);
+            //       this.bookSvc.showMessage(
+            //         billAPIResult.errorMessage,
+            //         'warning'
+            //       );
+            //     }
+            //     this.spinnerVisible = false;
+            //   },
+            //   error: (billError) => {
+            //     console.log(billError);
+            //     this.bookSvc.showMessage(billError.errorMessage, 'warning');
+            //     this.spinnerVisible = false;
+            //   },
+            // });
           } else {
             console.log(APIResult);
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');

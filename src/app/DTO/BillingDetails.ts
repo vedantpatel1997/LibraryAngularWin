@@ -1,8 +1,10 @@
 import { Address } from './Address';
+import { IssueBook } from './IssueBook';
 
 export interface BillingDeatils {
   billingSummary: BillingSummary;
   billingBooksInfo: BillingBooksInfo[];
+  issueDTos: IssueBook[];
 }
 
 export interface BillingSummary {
