@@ -17,7 +17,8 @@ export class AuthGuard {
     let loggedInUser = this.loginSvc.getUserData();
 
     if (loggedInUser == null || loggedInUser == undefined) {
-      alert('Please login to continue');
+      this.loginSvc.logout();
+      alert('Authorization failed. Please login');
       this.router.navigate(['/login']);
       return false;
     }

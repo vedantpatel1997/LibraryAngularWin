@@ -25,6 +25,7 @@ export class roleGuard {
     let loggedInUser = this.loginSvc.getUserData();
 
     if (loggedInUser == null || loggedInUser == undefined) {
+      this.loginSvc.removeloggedinData();
       alert('Please login to continue');
       this.router.navigate(['/login']);
       return false;

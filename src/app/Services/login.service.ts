@@ -7,6 +7,7 @@ import { userCred } from '../DTO/userCred';
 import { Router } from '@angular/router';
 import { APIToken } from '../DTO/APIToken';
 import { User } from '../DTO/User';
+import * as CryptoJS from 'crypto-js';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class LoginService {
   private token: string | undefined;
   private refreshToken: string | undefined;
   private bookApiUrl = environment.apiAddress + 'Authorize/';
+  private secretKey = environment.secret;
 
   // Behaviour subject to pass data in the app component.ts or any other component directly
   private loggedInSubject: BehaviorSubject<boolean> =
@@ -35,15 +37,20 @@ export class LoginService {
     // Storing tokens in the localstorage
     localStorage.setItem('token', APIResponse.data.token);
     localStorage.setItem('refreshToken', APIResponse.data.refreshToken);
+    // localStorage.setItem(
+    //   'curUserData',
+    //   JSON.stringify(APIResponse.data.userData)
+    // );
     localStorage.setItem(
       'curUserData',
-      JSON.stringify(APIResponse.data.userData)
+      this.encryptData(APIResponse.data.userData)
     );
   }
   getUserData() {
     return (
-      this.curUserdata ||
-      (JSON.parse(localStorage.getItem('curUserData')) as User)
+      // this.curUserdata ||
+      // (JSON.parse(localStorage.getItem('curUserData')) as User)
+      this.curUserdata || this.decryptData(localStorage.getItem('curUserData'))
     );
   }
   getTokenValue() {
@@ -130,5 +137,29 @@ export class LoginService {
 
     // If any error occurred or access was not granted, return false
     return false;
+  }
+
+  private encryptData(data: any) {
+    const iv = CryptoJS.lib.WordArray.random(16); // 16 bytes IV
+    const options = { iv: iv, mode: CryptoJS.mode.CFB }; // Customize the mode as needed
+    return CryptoJS.AES.encrypt(
+      JSON.stringify(data),
+      this.secretKey,
+      options
+    ).toString();
+  }
+
+  private decryptData(encryptedData: any): User | null {
+    try {
+      const options = { mode: CryptoJS.mode.CFB }; // Use the same mode as during encryption
+      const decryptedText = CryptoJS.AES.decrypt(
+        encryptedData,
+        this.secretKey,
+        options
+      ).toString(CryptoJS.enc.Utf8);
+      return JSON.parse(decryptedText) as User;
+    } catch (error) {
+      return null;
+    }
   }
 }
