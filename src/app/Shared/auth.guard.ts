@@ -29,6 +29,7 @@ export class AuthGuard {
       return true;
     } else {
       alert('You dont have permission to access this page.');
+      this.router.navigateByUrl('');
       return false;
     }
   }

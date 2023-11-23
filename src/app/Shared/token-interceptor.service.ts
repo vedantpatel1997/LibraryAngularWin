@@ -34,13 +34,23 @@ export class TokenInterceptorService implements HttpInterceptor {
   handleRefreshToken(request: HttpRequest<any>, next: HttpHandler) {
     return this.loginSvc.generateRefreshToken().pipe(
       switchMap((APIResponse: APIResponse) => {
-        this.loginSvc.setData(APIResponse);
-        return next.handle(
-          this.AddTokenHandler(request, APIResponse.data.token)
-        );
+        if (APIResponse.isSuccess) {
+          // Token generation is successful
+          this.loginSvc.setData(APIResponse);
+          this.loginSvc.login();
+          return next.handle(
+            this.AddTokenHandler(request, APIResponse.data.token)
+          );
+        } else {
+          // You might want to handle the error here or take appropriate action
+          return throwError('Token generation failed');
+        }
       }),
       catchError((errorData) => {
         console.log('Refreshtoken Generation error');
+        alert('Authorization failed, please login again!');
+        this.loginSvc.logout();
+
         return throwError(errorData);
       })
     );

@@ -75,7 +75,6 @@ export class UsersAdminComponent {
           'danger'
         );
         this.spinnerVisible = false;
-        console.log(error);
       },
     });
   }
@@ -109,7 +108,6 @@ export class UsersAdminComponent {
           'danger'
         );
         this.spinnerVisible = false;
-        console.log(error);
       },
     });
   }
@@ -129,7 +127,6 @@ export class UsersAdminComponent {
           'danger'
         );
         this.spinnerVisible = false;
-        console.log(error);
       },
     });
   }

@@ -97,7 +97,6 @@ export class PasswordComponent implements OnInit {
             `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong while getting the data !`,
             'danger'
           );
-          console.log(error);
           this.spinnerVisible = false;
         },
       });

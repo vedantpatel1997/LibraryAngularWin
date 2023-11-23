@@ -152,7 +152,6 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
         },
         error: (error) => {
           // Handle API call errors here
-          console.log(error);
           this.spinnerVisible = false;
         },
       });

@@ -162,8 +162,6 @@ export class AddressComponent implements OnInit {
               'warning'
             );
             this.spinnerVisible = false;
-
-            console.log(error);
           },
         });
       }
@@ -186,8 +184,6 @@ export class AddressComponent implements OnInit {
               'warning'
             );
             this.spinnerVisible = false;
-
-            console.log(error);
           },
         });
       }

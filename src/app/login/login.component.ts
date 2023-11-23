@@ -105,7 +105,6 @@ export class LoginComponent implements OnInit {
           'danger'
         );
         this.spinnerVisible = false;
-        console.log(error);
       },
     });
 

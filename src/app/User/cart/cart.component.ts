@@ -71,7 +71,6 @@ export class CartComponent implements OnInit {
         (error) => {
           // Handle network or unexpected errors here
           this.error = true;
-          console.error('Network Error:', error);
           this.spinnerVisible = false;
         }
       );

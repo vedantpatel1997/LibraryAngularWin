@@ -37,7 +37,6 @@ export class UserActivebooksAdminComponent {
       (error) => {
         // Handle network or unexpected errors here
         this.spinnerVisible = false;
-        console.log('Network Error:', error);
       }
     );
   }
@@ -96,7 +95,6 @@ export class UserActivebooksAdminComponent {
       error: (error) => {
         // Handle the error here
         if (error.status == 401) {
-          console.log(error);
           this.spinnerVisible = false;
         }
       },

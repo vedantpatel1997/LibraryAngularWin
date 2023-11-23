@@ -35,7 +35,6 @@ export class MyBooksComponent implements OnInit {
       (error) => {
         // Handle network or unexpected errors here
         this.spinnerVisible = false;
-        console.log('Network Error:', error);
       }
     );
   }
@@ -94,7 +93,6 @@ export class MyBooksComponent implements OnInit {
       error: (error) => {
         // Handle the error here
         if (error.status == 401) {
-          console.log(error);
           this.spinnerVisible = false;
         }
       },

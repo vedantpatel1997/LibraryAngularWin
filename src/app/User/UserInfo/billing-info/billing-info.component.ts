@@ -37,7 +37,6 @@ export class BillingInfoComponent {
       },
       error: (error) => {
         // Handle the error here
-        console.log(error);
         this.spinnerVisible = false;
         this.bookSvc.showMessage(
           `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,

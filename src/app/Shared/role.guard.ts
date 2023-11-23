@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+  UrlTree,
+} from '@angular/router';
 import { LoginService } from '../Services/login.service';
 import { Observable } from 'rxjs';
 import { User } from '../DTO/User';
@@ -29,6 +34,7 @@ export class roleGuard {
       return true;
     } else {
       alert('You dont have permission to access this page.');
+      this.router.navigateByUrl('');
       return false;
     }
   }

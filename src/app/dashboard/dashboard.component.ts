@@ -27,7 +27,6 @@ export class DashboardComponent implements OnInit {
       error: (error) => {
         // Handle the error here
         if (error.status == 401) {
-          console.log(error);
         }
         this.error = true;
       },

@@ -149,7 +149,6 @@ export class UserInfoAdminComponent {
         },
         error: (error) => {
           // Handle API call errors here
-          console.log(error);
           this.bookSvc.showMessage(
             `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
             'danger'

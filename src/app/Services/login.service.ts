@@ -42,7 +42,8 @@ export class LoginService {
   }
   getUserData() {
     return (
-      this.curUserdata || (JSON.parse(localStorage.getItem('userData')) as User)
+      this.curUserdata ||
+      (JSON.parse(localStorage.getItem('curUserData')) as User)
     );
   }
   getTokenValue() {
@@ -78,22 +79,23 @@ export class LoginService {
     this.loggedInSubject.next(true);
   }
   logout() {
+    this.removeloggedinData();
+    this.loggedInSubject.next(false);
+    this.route.navigateByUrl('');
+  }
+  removeloggedinData() {
+    // Order of this lines is matter alot, dont changed it blindly
     this.curUserdata = undefined;
     this.token = undefined;
     this.refreshToken = undefined;
-    this.loggedInSubject.next(false);
-    this.route.navigateByUrl('');
 
     // Removing tokens from localstorage
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('userData');
+    localStorage.removeItem('curUserData');
   }
   haveAccess(role: string) {
     try {
-      // Attempt to retrieve the token from local storage
-      // const loggedInToken = localStorage.getItem('token') || '';
-
       if (this.token === '') {
         // If the token is empty or not found, return false (no access)
         return false;

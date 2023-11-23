@@ -29,7 +29,6 @@ export class UserHistoryAdminComponent {
       },
       error: (error) => {
         // Handle the error here
-        console.log(error);
         this.bookSvc.showMessage(
           `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
           'danger'

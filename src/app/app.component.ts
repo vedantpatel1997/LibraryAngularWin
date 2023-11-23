@@ -24,13 +24,14 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.loginSvc.isLoggedIn.subscribe((loggedIn) => {
       this.curUser = this.loginSvc.getUserData();
-      if (loggedIn) {
-        this.userInfo.isLoggedin = loggedIn;
+      if (this.curUser !== null && this.curUser !== undefined) {
+        this.userInfo.isLoggedin = true;
         this.userInfo.isUser = this.curUser.role == 'User';
         this.userInfo.isAdmin = this.curUser.role == 'Admin';
         this.userInfo.isOwner = this.curUser.role == 'Owner';
       } else {
-        this.userInfo.isLoggedin = loggedIn;
+        this.loginSvc.removeloggedinData();
+        this.userInfo.isLoggedin = false;
         this.userInfo.isUser = false;
         this.userInfo.isAdmin = false;
         this.userInfo.isOwner = false;
