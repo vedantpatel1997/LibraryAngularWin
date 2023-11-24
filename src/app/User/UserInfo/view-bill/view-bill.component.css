@@ -61,6 +61,9 @@ body {
     display: none;
   }
 
+  .no-print {
+    display: none; /* or any other style to hide the navigation bar */
+  }
   /* Display the print area with additional styles */
   .printarea {
     /* Add any styles you want for the print area */

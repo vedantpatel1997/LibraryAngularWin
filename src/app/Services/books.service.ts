@@ -156,9 +156,22 @@ export class BooksService {
       `${this.bookUserTransactionApiUrl}GetBillByBillID?billId=${billId}`
     );
   }
-  SendBill(userId: number, billHtml: string): Observable<APIResponse> {
-    return this.http.get<APIResponse>(
-      `${this.bookUserTransactionApiUrl}SendBill?userId=${userId}&billHtml=${billHtml}`
+  sendPDF(
+    pdfBytes: Uint8Array,
+    userId: number,
+    pdfName: string
+  ): Observable<any> {
+    const formData = new FormData();
+    formData.append(
+      'pdf',
+      new Blob([pdfBytes], { type: 'application/pdf' }),
+      `${pdfName}.pdf`
+    );
+    formData.append('userId', userId.toString());
+
+    return this.http.post<any>(
+      `${this.bookUserTransactionApiUrl}sendPDF`,
+      formData
     );
   }
 }
