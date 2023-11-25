@@ -58,6 +58,7 @@
     <thead>
       <tr>
         <th>#</th>
+        <th>Bill Number</th>
         <th>Billing Date</th>
         <th>Books Quantity</th>
         <th>Total Amount</th>
@@ -67,6 +68,7 @@
     <tbody>
       <tr *ngFor="let bill of billingDetails; let i = index">
         <td>{{ i + 1 }}</td>
+        <td>{{ formatBillNumber(bill.billingId) }}</td>
         <td>{{ bill.date | date }}</td>
         <td>{{ bill.bookQuantity }}</td>
         <td>{{ bill.totalAmount | currency }}</td>

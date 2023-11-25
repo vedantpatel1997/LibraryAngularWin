@@ -10,20 +10,26 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 const routes: Routes = [
   {
     path: 'Books',
+    canActivate: [roleGuard],
     loadChildren: () =>
       import('./Books-Admin/book-detail-admin.module').then(
         (m) => m.BookDetailAdminModule
       ),
   },
-  { path: 'Dashboard', component: DashboardAdminComponent },
+  {
+    path: 'Dashboard',
+    component: DashboardAdminComponent,
+    canActivate: [roleGuard],
+  },
   {
     path: 'Users',
+    canActivate: [roleGuard],
     loadChildren: () =>
       import('./Users-Admin/users-detail-admin.module').then(
         (m) => m.UsersDetailAdminModule
       ),
   },
-  { path: 'AddBook', component: AddNewBookComponent },
+  { path: 'AddBook', component: AddNewBookComponent, canActivate: [roleGuard] },
 ];
 
 @NgModule({

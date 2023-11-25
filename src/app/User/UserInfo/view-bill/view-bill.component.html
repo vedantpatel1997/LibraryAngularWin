@@ -8,17 +8,20 @@
         </div>
       </div>
     </div>
-    <div class="row mb-4">
+    <div
+      class="row mb-4"
+      *ngIf="billingDetails !== undefined && curBill !== undefined"
+    >
       <div class="printArea">
         <div class="col-sm-12">
-          <div class="card" id="myInvoice">
+          <div class="card printarea" id="myInvoice">
             <div class="card-body">
               <div
                 class="invoice-title"
                 *ngIf="billingDetails !== null && billingDetails !== undefined"
               >
                 <h4 class="float-end font-size-15" id="invoiceId">
-                  Invoice #LMS00{{ billingDetails?.billingId }}
+                  Invoice #{{ formatBillNumber(billingDetails?.billingId) }}
                   <span class="badge bg-success font-size-12 ms-2">Paid</span>
                 </h4>
                 <div class="mb-4">
@@ -62,7 +65,7 @@
                   <div class="text-muted text-sm-end">
                     <div>
                       <h5 class="font-size-15 mb-1">Invoice No:</h5>
-                      <p>LMS00{{ billingDetails?.billingId }}</p>
+                      <p>{{ formatBillNumber(billingDetails?.billingId) }}</p>
                     </div>
                     <div class="mt-4">
                       <h5 class="font-size-15 mb-1">Invoice Date:</h5>
@@ -86,7 +89,7 @@
                         <th style="width: 70px">No.</th>
                         <th>Item</th>
                         <th>Original Price</th>
-                        <th>Return Date</th>
+                        <th>Estimated Return Date</th>
                         <th class="text-end" style="width: 120px">Total</th>
                       </tr>
                     </thead>
@@ -132,9 +135,19 @@
                           </div>
                         </td>
                         <td>{{ book?.bookOriginalPrice | currency }}</td>
-                        <td>{{ book?.estimatedReturnDate | date }}</td>
+                        <td>
+                          <div>{{ book?.estimatedReturnDate | date }}</div>
+                          <div *ngIf="penalty" class="text-danger">
+                            Penalty Applied
+                          </div>
+                        </td>
                         <td class="text-end">
-                          {{ book?.bookRentPrice | currency }}
+                          <div *ngIf="!penalty">
+                            {{ book?.bookRentPrice | currency }}
+                          </div>
+                          <div class="text-danger" *ngIf="penalty">
+                            {{ book?.bookRentPrice | currency }}
+                          </div>
                         </td>
                       </tr>
                       <!-- end tr -->
@@ -156,7 +169,7 @@
                         <td class="border-0 text-end">0.00</td>
                       </tr>
                       <!-- end tr -->
-                      <tr>
+                      <tr *ngIf="!penalty">
                         <th scope="row" colspan="4" class="border-0 text-end">
                           Shipping Charge :
                         </th>
@@ -193,14 +206,23 @@
                 <!-- end table responsive -->
                 <div class="d-print-none mt-4">
                   <div class="float-end">
-                    <!-- <a
+                    <a
                       href="javascript:window.print()"
                       class="btn btn-success me-1"
                       ><i class="fa fa-print"></i
-                    ></a> -->
-                    <a class="btn btn-primary w-md" (click)="downloadPDF()"
+                    ></a>
+                    <a
+                      class="ms-1 d-print-none btn btn-primary w-md"
+                      (click)="downloadPDF()"
                       >Download</a
                     >
+                    <!-- <a
+                      class="d-print-none btn btn-success w-md"
+                      (click)="sendEmail(billingDetails.userId)"
+                      ><i
+                        class="fa-sharp fa-solid fa-envelope-circle-check fa-sm"
+                      ></i
+                    ></a> -->
                   </div>
                 </div>
               </div>

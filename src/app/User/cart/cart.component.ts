@@ -181,7 +181,7 @@ export class CartComponent implements OnInit {
       const bookInfo: BillingBooksInfo = {
         bookId: cur.bookId,
         rentDays: cur.rentPeriod,
-        estimatedReturnDate: this.getReturnDateForCSharp(+cur.rentPeriod),
+        estimatedReturnDate: this.getReturnDateForCSharp(+cur.rentPeriod - 1),
         bookOriginalPrice: cur.price,
         bookRentPrice: cur.totalRentPrice,
       };

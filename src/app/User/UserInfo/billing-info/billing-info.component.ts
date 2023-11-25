@@ -49,4 +49,8 @@ export class BillingInfoComponent {
   viewBill(billingId: number) {
     this.router.navigateByUrl(`Books/User/ViewBill/${billingId}`);
   }
+
+  formatBillNumber(billNumber: number): string {
+    return `LMS${billNumber.toString().padStart(4, '0')}`;
+  }
 }

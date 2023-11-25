@@ -10,11 +10,11 @@ import html2pdf from 'html2pdf.js';
   styleUrls: ['./view-bill.component.css'],
 })
 export class ViewBillComponent {
-  curBill: number;
+  curBill: number | undefined;
   spinnerVisible: boolean = false;
-  billingDetails: BillingSummary;
+  billingDetails: BillingSummary | undefined;
   totalRentedBooksPrice: number = 0;
-
+  penalty: boolean = false;
   constructor(private route: ActivatedRoute, private bookSvc: BooksService) {
     this.route.params.subscribe((p) => {
       this.curBill = p['billId'];
@@ -27,6 +27,12 @@ export class ViewBillComponent {
       next: (APIResult) => {
         if (APIResult.isSuccess) {
           this.billingDetails = APIResult.data;
+          if (
+            this.billingDetails.pickup == false &&
+            this.billingDetails.delivery == false
+          ) {
+            this.penalty = true;
+          }
           this.billingDetails.billingBooksInfos.forEach(
             (cur) => (this.totalRentedBooksPrice += cur.bookRentPrice)
           );
@@ -44,41 +50,9 @@ export class ViewBillComponent {
       },
     });
   }
+  sendEmail(userId: number) {
+    console.log('sednEmail');
 
-  // sendEmail(userId: number) {
-  //   const element = document.getElementById('card');
-  //   const invoiceNameElement = document.getElementById('invoiceId');
-
-  //   if (!invoiceNameElement) {
-  //     console.error("Element with ID 'invoiceId' not found.");
-  //     return;
-  //   }
-
-  //   const invoiceName = invoiceNameElement.innerText.trim(); // Use innerText and trim to remove leading/trailing whitespaces
-  //   let pdfBytes = html2pdf(element);
-  //   console.log('PDF file', pdfBytes);
-
-  //   this.spinnerVisible = true;
-  //   this.bookSvc.sendPDF(pdfBytes, userId, invoiceName).subscribe({
-  //     next: (APIResult) => {
-  //       if (APIResult.isSuccess) {
-  //         this.bookSvc.showMessage(`Successfully sent bill`, 'success');
-  //         this.spinnerVisible = false;
-  //       }
-  //       this.spinnerVisible = false;
-  //     },
-  //     error: (error) => {
-  //       // Handle the error here
-  //       this.spinnerVisible = false;
-  //       this.bookSvc.showMessage(
-  //         `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong while getting the data!`,
-  //         'danger'
-  //       );
-  //     },
-  //   });
-  // }
-
-  downloadPDF() {
     const invoiceName = document
       .getElementById('invoiceId')
       .innerText.trim()
@@ -94,6 +68,47 @@ export class ViewBillComponent {
 
     const pEl = document.getElementById('myInvoice');
     console.log(pEl);
+    let pdfBytes = html2pdf().from(pEl).set(options);
+
+    this.spinnerVisible = true;
+    this.bookSvc.sendPDF(pdfBytes, userId, invoiceName).subscribe({
+      next: (APIResult) => {
+        if (APIResult.isSuccess) {
+          this.bookSvc.showMessage(`Successfully sent bill`, 'success');
+          this.spinnerVisible = false;
+        }
+        this.spinnerVisible = false;
+      },
+      error: (error) => {
+        // Handle the error here
+        this.spinnerVisible = false;
+        this.bookSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i> Something went wrong while getting the data!`,
+          'danger'
+        );
+      },
+    });
+  }
+  downloadPDF() {
+    const invoiceName = document
+      .getElementById('invoiceId')
+      .innerText.trim()
+      .replace('Paid', '')
+      .trim();
+
+    let options = {
+      margin: 0,
+      filename: `${invoiceName}.pdf`,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 1.5 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' },
+      exclude: ['d-print-none'],
+    };
+
+    const pEl = document.getElementById('myInvoice');
     html2pdf().from(pEl).set(options).save();
+  }
+  formatBillNumber(billNumber: number): string {
+    return `LMS${billNumber.toString().padStart(4, '0')}`;
   }
 }
