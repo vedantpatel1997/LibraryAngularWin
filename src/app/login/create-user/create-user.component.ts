@@ -152,6 +152,10 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
         },
         error: (error) => {
           // Handle API call errors here
+          this.bookSvc.showMessage(
+            `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+            'danger'
+          );
           this.spinnerVisible = false;
         },
       });
