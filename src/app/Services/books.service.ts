@@ -6,12 +6,14 @@ import { environment } from '../environments/environment';
 import { APIResponse } from '../DTO/APIResponse';
 import { IssueBook } from '../DTO/IssueBook';
 import { BillingDeatils } from '../DTO/BillingDetails';
+import { Category } from '../DTO/Category';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BooksService {
   bookApiUrl = environment.apiAddress + 'Books/';
+  categoryApiUrl = environment.apiAddress + 'Category/';
   bookUserTransactionApiUrl =
     environment.apiAddress + 'BooksUsersTransactions/';
 
@@ -19,6 +21,12 @@ export class BooksService {
 
   createBook(bookData: Book): Observable<APIResponse> {
     return this.http.post<APIResponse>(`${this.bookApiUrl}Create`, bookData);
+  }
+  createCategory(categoryData: Category): Observable<APIResponse> {
+    return this.http.post<APIResponse>(
+      `${this.categoryApiUrl}CreateCategory`,
+      categoryData
+    );
   }
   getAllBooks(): Observable<APIResponse> {
     return this.http.get<APIResponse>(this.bookApiUrl + 'GetAllBooks');

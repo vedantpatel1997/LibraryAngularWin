@@ -6,6 +6,7 @@ import { AuthGuard } from '../Shared/auth.guard';
 import { roleGuard } from '../Shared/role.guard';
 import { AddNewBookComponent } from './add-new-book/add-new-book.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AddNewCategoryComponent } from './add-new-category/add-new-category.component';
 
 const routes: Routes = [
   {
@@ -30,10 +31,11 @@ const routes: Routes = [
       ),
   },
   { path: 'AddBook', component: AddNewBookComponent, canActivate: [roleGuard] },
+  { path: 'AddCategory', component: AddNewCategoryComponent, canActivate: [roleGuard] },
 ];
 
 @NgModule({
-  declarations: [DashboardAdminComponent, AddNewBookComponent],
+  declarations: [DashboardAdminComponent, AddNewBookComponent, AddNewCategoryComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
