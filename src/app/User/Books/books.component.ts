@@ -63,6 +63,10 @@ export class BooksComponent implements OnInit {
         if (error.status == 401) {
         }
         this.error = true;
+        this.booksSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
       },
     });
 
@@ -78,6 +82,10 @@ export class BooksComponent implements OnInit {
           this.unauthorized = true;
         }
         this.error = true;
+        this.booksSvc.showMessage(
+          `<i class="fa-solid fa-triangle-exclamation fa-lg"></i>  Something went wrong while getting the data!`,
+          'danger'
+        );
       },
     });
   }
