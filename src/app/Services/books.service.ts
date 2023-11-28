@@ -114,12 +114,19 @@ export class BooksService {
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       `;
+
+      // Move focus to the error message
+      const errorMessageElement = alertContainer!.querySelector('.alert');
+      if (errorMessageElement) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     } else {
       console.error(
         'Invalid alert type. Valid types are: success, info, warning, danger'
       );
     }
   }
+
   getBookHistoryByUserId(userId: number) {
     return this.http.get<APIResponse>(
       `${this.bookUserTransactionApiUrl}getBooksHistoryByUserId?userId=${userId}`

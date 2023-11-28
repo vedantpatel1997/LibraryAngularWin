@@ -138,13 +138,15 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
       this.userSvc.createUser(userData).subscribe({
         next: (APIResult) => {
           if (APIResult.isSuccess) {
-            console.log(APIResult);
-            this.bookSvc.showMessage(
-              `User succesfully Created. Username: ${APIResult.data.username}, Please Login to continue.`,
-              'success'
-            );
             this.userForm.reset(); // Reset form values
             this.spinnerVisible = false;
+            this.route.navigate(['/login']);
+            setTimeout(() => {
+              this.bookSvc.showMessage(
+                `User succesfully Created. Username: ${APIResult.data.username}, Please Login to continue.`,
+                'success'
+              );
+            }, 1000); // 1000 milliseconds (1 seconds)
           } else {
             this.bookSvc.showMessage(APIResult.errorMessage, 'warning');
             this.spinnerVisible = false;

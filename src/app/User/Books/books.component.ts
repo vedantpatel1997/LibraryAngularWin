@@ -92,7 +92,7 @@ export class BooksComponent implements OnInit {
 
   addToCart(bookId: number) {
     if (!this.loginSvc.getUserData()) {
-      this.booksSvc.showMessage('Please login to add book in the cart');
+      this.booksSvc.showMessage('Please login to add book in the cart', 'warning');
       return;
     }
     this.booksSvc
