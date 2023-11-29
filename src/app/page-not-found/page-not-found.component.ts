@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
         <div class="alert alert-danger" role="alert">
           <h4 class="alert-heading">Page Not Found</h4>
           <p>The page you are looking for does not exist.</p>
-          <a [routerLink]="['/']" class="btn btn-primary">Go to Dashboard</a>
+          <a [routerLink]="['/']" class="btn btn-primary">Go to Home</a>
         </div>
       </div>
     </div>
