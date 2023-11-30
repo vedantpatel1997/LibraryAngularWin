@@ -40,6 +40,24 @@ export class CartComponent implements OnInit {
     this.user = loginSvc.getUserData();
   }
   ngOnInit(): void {
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log('Current Timezone', userTimeZone);
+
+    let utcDate = new Date();
+    const localIndiaString = utcDate.toLocaleString('en-US', {
+      timeZone: 'Asia/Kolkata',
+    });
+    const localWatelooString = utcDate.toLocaleString('en-US', {
+      timeZone: userTimeZone,
+    });
+    const timezoneOffset = new Date().getTimezoneOffset();
+
+    // Send the offset to the server (you might use an AJAX request or include it in a form submission)
+    console.log(`User's timezone : ${userTimeZone}`);
+    console.log('Server UTC Time', utcDate);
+    console.log('Local India Time', localIndiaString);
+    console.log('Local India Time', localWatelooString);
+
     this.getBookData();
   }
 
@@ -181,7 +199,6 @@ export class CartComponent implements OnInit {
       const bookInfo: BillingBooksInfo = {
         bookId: cur.bookId,
         rentDays: cur.rentPeriod,
-        estimatedReturnDate: this.getReturnDateForCSharp(+cur.rentPeriod - 1),
         bookOriginalPrice: cur.price,
         bookRentPrice: cur.totalRentPrice,
       };

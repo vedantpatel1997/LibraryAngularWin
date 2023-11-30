@@ -14,7 +14,7 @@ export interface BillingSummary {
   userLastName?: string;
   userEmail?: string;
   userPhone?: string;
-  date?: string;
+  date?: Date;
   address?: Address;
   bookQuantity: number;
   delivery: boolean;
@@ -33,7 +33,7 @@ export interface BillingBooksInfo {
   bookCategory?: string;
   bookImageUrl?: string;
   rentDays: number;
-  estimatedReturnDate: string;
+  estimatedReturnDate?: Date;
   bookOriginalPrice: number;
   bookRentPrice: number;
   billingId?: number;

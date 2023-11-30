@@ -4,9 +4,8 @@
 
 export const environment = {
   production: false,
-  apiAddress: 'https://libraryconestoga.azurewebsites.net/api/',
+  apiAddress: 'https://localhost:7026/api/',
   secret: 'Vedant@1997',
-  // apiAddress: 'https://localhost:7026/api/',
 };
 
 /*

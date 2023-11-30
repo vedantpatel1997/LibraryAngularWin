@@ -11,4 +11,5 @@ export interface User {
   password?: string;
   role?: string;
   addressId?: number;
+  timezone?: string;
 }

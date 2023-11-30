@@ -132,6 +132,7 @@ export class CreateUserComponent implements OnInit, AfterViewInit {
         phone: this.userForm.controls['phone'].value,
         username: this.userForm.controls['username'].value,
         password: this.userForm.controls['password'].value,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       };
       this.spinnerVisible = true;
 
