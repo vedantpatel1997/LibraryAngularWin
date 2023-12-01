@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
             this.route.navigate(['']);
           }
         } else {
-          this.bookSvc.showMessage('Invalid Credentails', 'danger');
+          this.bookSvc.showMessage(APIResult.errorMessage, 'danger');
         }
         this.spinnerVisible = false;
       },
