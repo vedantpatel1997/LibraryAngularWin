@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -34,8 +34,6 @@ export class DueBooksComponent {
     this.bookSvc.getAllDueBooks().subscribe(
       (APIResult) => {
         if (APIResult.isSuccess) {
-          console.log(this.dueBooks);
-
           APIResult.data.forEach((cur, i) => {
             cur.id = i + 1;
             cur.estReturnDate = this.getEstimateReturnDate(
@@ -45,8 +43,8 @@ export class DueBooksComponent {
             cur.daysRemaining = this.calculateDaysRemaining(cur.estReturnDate);
             cur.fullName = cur.user.firstName + ' ' + cur.user.lastName;
           });
-          this.dueBooks = APIResult.data;
 
+          this.dueBooks = APIResult.data;
           this.dataSource = new MatTableDataSource(this.dueBooks);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
@@ -60,15 +58,6 @@ export class DueBooksComponent {
         this.spinnerVisible = false;
       }
     );
-  }
-
-  formatDate(isoDate: string): string {
-    const date = new Date(isoDate);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
   }
 
   getEstimateReturnDate(days: number, issueDate: string): string {

@@ -19,7 +19,6 @@
   </mat-form-field>
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort class="table-responsive">
-      <!-- ID Column -->
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
         <td mat-cell *matCellDef="let dueBook">{{ dueBook.id }}</td>
@@ -32,15 +31,11 @@
         </td>
       </ng-container>
 
-      <!-- Author Column -->
       <ng-container matColumnDef="userName">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>User Name</th>
-        <td mat-cell *matCellDef="let dueBook">
-          {{ dueBook.fullName }}
-        </td>
+        <td mat-cell *matCellDef="let dueBook">{{ dueBook.fullName }}</td>
       </ng-container>
 
-      <!-- Category Column -->
       <ng-container matColumnDef="issueDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Issue Date</th>
         <td mat-cell *matCellDef="let dueBook">
@@ -48,22 +43,28 @@
         </td>
       </ng-container>
 
-      <!-- Price Column -->
       <ng-container matColumnDef="estimatedReturnDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          Estimate Return Date
+          Estimated Return Date
         </th>
         <td mat-cell *matCellDef="let dueBook">
           {{ dueBook.estReturnDate | date : "yyyy-MM-dd" }}
         </td>
       </ng-container>
 
-      <!-- Total Quantity Column -->
       <ng-container matColumnDef="daysRemaining">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Days Remaining
         </th>
-        <td mat-cell *matCellDef="let dueBook">
+        <td
+          mat-cell
+          *matCellDef="let dueBook"
+          [ngClass]="{
+            'text-danger': dueBook.daysRemaining
+              ? dueBook.daysRemaining < 0
+              : false
+          }"
+        >
           {{ dueBook.daysRemaining }}
         </td>
       </ng-container>
@@ -82,6 +83,7 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let dueBook; columns: displayedColumns"></tr>
+
       <!-- Row shown when there is no matching data. -->
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colspan]="displayedColumns.length">
