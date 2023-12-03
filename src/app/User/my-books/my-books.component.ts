@@ -25,6 +25,7 @@ export class MyBooksComponent implements OnInit {
     this.spinnerVisible = true;
     this.bookSvc.getBooksByUserId(this.curUserId).subscribe(
       (APIResult) => {
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         if (APIResult.isSuccess) {
           this.myBooks = APIResult.data;
           this.spinnerVisible = false;

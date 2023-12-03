@@ -189,4 +189,18 @@ export class BooksService {
       formData
     );
   }
+  convertUtcToTimeZone(utcDateTimeString: string, timeZoneId: string): string {
+    const utcDateTime = new Date(utcDateTimeString);
+
+    // Get user's time zone (you might get this from a service or user preferences)
+    const userTimeZone = timeZoneId;
+
+    // Convert UTC to user's local time
+    const userLocalDateTime = new Date(
+      utcDateTime.toLocaleString('en-US', { timeZone: userTimeZone })
+    );
+
+    // Format the resulting local date time as a string
+    return userLocalDateTime.toISOString();
+  }
 }

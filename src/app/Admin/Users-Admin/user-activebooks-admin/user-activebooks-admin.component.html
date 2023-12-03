@@ -12,7 +12,7 @@
       class="nav-link"
       routerLinkActive="active"
       [routerLink]="['/Admin/Users/ActiveBooks', curUserId]"
-      >Issued Books</a
+      >Current Rentals</a
     >
   </li>
   <li class="nav-item">
@@ -20,7 +20,7 @@
       class="nav-link"
       routerLinkActive="active"
       [routerLink]="['/Admin/Users/History', curUserId]"
-      >User History</a
+      >Books Submission History</a
     >
   </li>
   <li class="nav-item">
@@ -40,8 +40,8 @@
     >
   </li>
 </ul>
-<h2 class="my-4">Issued Books</h2>
-<div>
+<div class="container">
+  <h2 class="mt-5 mb-4">Current Rental Books</h2>
   <div id="liveAlertPlaceholder"></div>
   <div class="form-container row" [ngClass]="{ transparent: spinnerVisible }">
     <div class="spinner-container" *ngIf="spinnerVisible">
@@ -69,9 +69,10 @@
               <div class="row">
                 <div class="col-2">
                   <img
-                    class="img-fluid"
+                    class="img-fluid clickable-image"
                     src="{{ cur.book.imageURL }}"
                     alt="{{ cur.book.title }}"
+                    routerLink="/Admin/Books/Info/{{ cur.bookId }}"
                   />
                 </div>
                 <div class="col-6">
@@ -156,6 +157,5 @@
         </div>
       </div>
     </div>
-    
   </div>
 </div>

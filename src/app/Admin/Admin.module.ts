@@ -7,6 +7,7 @@ import { roleGuard } from '../Shared/role.guard';
 import { AddNewBookComponent } from './add-new-book/add-new-book.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddNewCategoryComponent } from './add-new-category/add-new-category.component';
+import { DueBooksComponent } from './due-books/due-books.component';
 
 const routes: Routes = [
   {
@@ -35,7 +36,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DashboardAdminComponent, AddNewBookComponent, AddNewCategoryComponent],
+  declarations: [DashboardAdminComponent, AddNewBookComponent, AddNewCategoryComponent, DueBooksComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

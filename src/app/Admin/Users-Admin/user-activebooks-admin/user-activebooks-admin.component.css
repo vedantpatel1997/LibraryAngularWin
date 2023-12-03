@@ -126,3 +126,7 @@ h2 {
 }
 
 /* Add more styles as needed to enhance the visual appeal */
+.clickable-image {
+  /* Add styles specific to the clickable image container */
+  cursor: pointer; /* Change cursor to pointer on hover, indicating it's clickable */
+}
