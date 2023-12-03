@@ -77,6 +77,15 @@
             >Add Book</a
           >
         </li>
+        <li class="nav-item" *ngIf="userInfo.isAdmin || userInfo.isOwner">
+          <a
+            routerLinkActive="active"
+            class="nav-link"
+            [routerLink]="['Admin', 'DueBooks']"
+          >
+            Due Books</a
+          >
+        </li>
       </ul>
 
       <ul class="navbar-nav ms-auto">

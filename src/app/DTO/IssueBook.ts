@@ -8,4 +8,10 @@ export interface IssueBook {
   issueDate?: string;
   book?: Book;
   user?: User;
+  id?: number;
+
+  // Properties created for specific purpose only (temparory).
+  estReturnDate?: string;
+  daysRemaining?: number;
+  fullName?: string;
 }

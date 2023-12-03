@@ -8,6 +8,12 @@ import { AddNewBookComponent } from './add-new-book/add-new-book.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddNewCategoryComponent } from './add-new-category/add-new-category.component';
 import { DueBooksComponent } from './due-books/due-books.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 
 const routes: Routes = [
   {
@@ -32,14 +38,32 @@ const routes: Routes = [
       ),
   },
   { path: 'AddBook', component: AddNewBookComponent, canActivate: [roleGuard] },
-  { path: 'AddCategory', component: AddNewCategoryComponent, canActivate: [roleGuard] },
+  {
+    path: 'AddCategory',
+    component: AddNewCategoryComponent,
+    canActivate: [roleGuard],
+  },
+  { path: 'DueBooks', component: DueBooksComponent, canActivate: [roleGuard] },
 ];
 
 @NgModule({
-  declarations: [DashboardAdminComponent, AddNewBookComponent, AddNewCategoryComponent, DueBooksComponent],
+  declarations: [
+    DashboardAdminComponent,
+    AddNewBookComponent,
+    AddNewCategoryComponent,
+    DueBooksComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatIconModule,
     ReactiveFormsModule,
     FormsModule,
   ],
