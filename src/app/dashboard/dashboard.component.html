@@ -53,12 +53,12 @@
   </button>
 </div>
 
-<div class="container mt-5">
+<div class="container">
   <!-- Book Cards -->
   <div class="row mt-5">
     <!-- Book 1 -->
     <div class="row" *ngIf="!error && categories?.length > 0">
-      <h2 class="text-center">
+      <h2 class="text-center pb-4 text-uppercase">
         Search Books based on the these variety of categories
       </h2>
       <ng-container *ngFor="let category of categories">
