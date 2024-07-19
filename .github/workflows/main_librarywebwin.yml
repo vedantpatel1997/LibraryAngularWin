@@ -27,7 +27,7 @@ jobs:
       - name: Archive production artifacts
         run: |
           mkdir -p build_output
-          mv dist build_output/dist
+          mv dist/librarymanagement.web build_output/
           tar -czf build_output.tar.gz -C build_output .
       
       - name: Upload artifact for deployment job
