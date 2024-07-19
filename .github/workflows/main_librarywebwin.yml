@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - LibraryWebWin
+name: Build and deploy Node.js app to Azure Web App - LibraryWebWIN
 
 on:
   push:
@@ -51,15 +51,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4B7FED50710348F8BB871216A9A482AC }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F6FD1052F90E4A0BB93579FF40E66810 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_85B3254E41DF49A99C63C491F5E5879D }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8632B4CAE37345B9B1541A3E20E21110 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_440DE5B9CB92422EBD1057058924B922 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9C7FF312F1C54C53AE7011BD372C8BB8 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'LibraryWebWin'
+          app-name: 'LibraryWebWIN'
           slot-name: 'Production'
           package: .
           
